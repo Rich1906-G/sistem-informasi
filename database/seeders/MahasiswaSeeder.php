@@ -24,7 +24,7 @@ class MahasiswaSeeder extends Seeder
             'nim' => '223303030307',
             'semester' => '7',
             'no_hp' => '082268742976',
-            'pas_foto' => 'storage/foto/' . $fileName,
+            'pas_foto' => 'storage/' . $fileName,
             'nama_pas_foto' => $fileName,
         ]);
     }

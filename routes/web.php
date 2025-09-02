@@ -19,6 +19,8 @@ Route::middleware('auth:account')->group(function () {
     Route::middleware(['role:Admin'])->group(function () {
         Route::prefix('admin')->group(function () {
             Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+            Route::get('/data-mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa');
+            Route::get('/tugas-mahasiswa', [AdminController::class, 'tugas'])->name('admin.tugas');
         });
     });
 
