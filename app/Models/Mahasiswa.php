@@ -12,6 +12,10 @@ class Mahasiswa extends Model
 
     public function account()
     {
-        return $this->hasMany(Account::class);
+        return $this->belongsTo(Account::class);
+    }
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class);
     }
 }

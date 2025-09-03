@@ -12,7 +12,6 @@ class Admin extends Model
 
     public function account()
     {
-        return $this->hasMany(Account::class);
+        return $this->belongsTo(Account::class);
     }
-    
 }

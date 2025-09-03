@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\Tugas;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        return view('admin.dashboard', ['title' => 'Dashboard Admin']);
+        return view('admin.dashboard', ['title' => 'Dashboard Admin', 'header' => 'Dashboard Admin']);
     }
 
     public function mahasiswa()
@@ -21,8 +22,23 @@ class AdminController extends Controller
 
     public function tugas()
     {
-        // $data_mahasiswa = Mahasiswa::all();
-        // dd($data_mahasiswa);
-        return view('admin.tugas', ['title' => 'Tugas Mahasiswa', 'header' => 'Tugas Mahasiswa']);
+        $data_tugas = Tugas::with('mahasiswa')->paginate(10);
+        // dd($data_tugas);
+        return view('admin.tugas', compact('data_tugas'), ['title' => 'Tugas Mahasiswa', 'header' => 'Tugas Mahasiswa']);
+    }
+
+    public function setujui_tugas($id)
+    {
+        $tugas = Tugas::findOrFail($id);
+
+        if ($tugas->status === 'Disetujui') {
+            $tugas->update(['status' => 'Tidak Disetujui']);
+        } elseif ($tugas->status === 'Tidak Disetujui') {
+            $tugas->update([
+                'status' => 'Disetujui'
+            ]);
+        }
+
+        return redirect()->back();
     }
 }
