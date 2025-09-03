@@ -34,6 +34,7 @@ Route::middleware('auth:account')->group(function () {
     Route::middleware(['role:Mahasiswa'])->group(function () {
         Route::prefix('mahasiswa')->group(function () {
             Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard');
+            Route::get('/data-mahasiswa', [MahasiswaController::class, 'mahasiswa'])->name('mahasiswa.mahasiswa');
         });
     });
 

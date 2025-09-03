@@ -1,20 +1,20 @@
 <!-- Sidebar -->
 <aside class="w-64 bg-blue-900 text-white min-h-screen p-4 hidden md:block">
-    <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+    <h2 class="text-xl font-bold mb-6">Dashboard Mahasiswa</h2>
     <nav>
         <ul class="space-y-4">
             <li>
-                <a href="{{ route('admin.dashboard') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                <a href="{{ route('mahasiswa.dashboard') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
                     🏠 Dashboard
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.mahasiswa') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                <a href="{{ route('mahasiswa.mahasiswa') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
                     📘 Data Mahasiswa
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.tugas') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                <a href="#" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
                     📝 Tugas
                 </a>
             </li>

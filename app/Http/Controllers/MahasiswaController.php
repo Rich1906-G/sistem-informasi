@@ -12,8 +12,21 @@ class MahasiswaController extends Controller
     {
         $account = Auth::guard('account')->id();
 
-        $data = Mahasiswa::where('account_id', $account)->first();
+        $data_mahasiswa = Mahasiswa::where('account_id', $account)->first();
 
-        return view('mahasiswa.dashboard', compact('data'));
+        // dd($data_mahasiswa);
+
+        return view('mahasiswa.dashboard', compact('data_mahasiswa'), ['title' => 'Dashboard Mahasiswa', 'header' => 'Dashboard Mahasiswa']);
+    }
+
+    public function mahasiswa()
+    {
+        $account = Auth::guard('account')->id();
+
+        $data_mahasiswa = Mahasiswa::where('account_id', $account)->first();
+
+        // dd($data_mahasiswa);
+
+        return view('mahasiswa.mahasiswa', compact('data_mahasiswa'), ['title' => 'Data Mahasiswa', 'header' => 'Data Mahasiswa']);
     }
 }
