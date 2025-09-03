@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\Project;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
 
@@ -22,8 +23,7 @@ class AdminController extends Controller
 
     public function tugas()
     {
-        $data_tugas = Tugas::with('mahasiswa')->paginate(10);
-        // dd($data_tugas);
+        $data_tugas = Tugas::with('mahasiswa', 'project')->paginate(10);
         return view('admin.tugas', compact('data_tugas'), ['title' => 'Tugas Mahasiswa', 'header' => 'Tugas Mahasiswa']);
     }
 

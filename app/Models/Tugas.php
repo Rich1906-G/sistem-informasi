@@ -14,4 +14,9 @@ class Tugas extends Model
     {
         return $this->belongsTo(Mahasiswa::class);
     }
+
+    public function project()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

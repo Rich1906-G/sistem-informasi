@@ -17,7 +17,6 @@ return new class extends Migration
                 ->constrained('mahasiswa', 'id', 'tugas_mahasiswa_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_tugas');
-            $table->string('file_tugas');
             $table->enum('status', ['Disetujui', 'Tidak Disetujui']);
             $table->timestamps();
         });

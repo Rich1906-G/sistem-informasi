@@ -27,7 +27,31 @@ class AccountSeeder extends Seeder
         ]);
 
         Account::create([
-            'username' => 'mahasiswa',
+            'username' => 'David',
+            'password' => Hash::make('passwordMahasiswa'),
+            'role' => 'Mahasiswa',
+        ]);
+
+        Account::create([
+            'username' => 'Adrian',
+            'password' => Hash::make('passwordMahasiswa'),
+            'role' => 'Mahasiswa',
+        ]);
+
+        Account::create([
+            'username' => 'Jonathan',
+            'password' => Hash::make('passwordMahasiswa'),
+            'role' => 'Mahasiswa',
+        ]);
+
+        Account::create([
+            'username' => 'Stephan',
+            'password' => Hash::make('passwordMahasiswa'),
+            'role' => 'Mahasiswa',
+        ]);
+
+        Account::create([
+            'username' => 'Anderson',
             'password' => Hash::make('passwordMahasiswa'),
             'role' => 'Mahasiswa',
         ]);

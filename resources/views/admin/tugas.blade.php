@@ -15,6 +15,10 @@
             setujui: false,
             idTugas: null,
             tidakDisetujui: false,
+            showProject: false,
+            idMahasiswa: null,
+            project: [],
+            namaTugas: '',
         }">
         <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
 
@@ -180,9 +184,7 @@
                         <th class="px-4 py-3 lg:py-4 ">No</th>
                         <th class="px-4 py-3 lg:py-4 ">Nama Mahasiswa</th>
                         <th class="p-px-4 py-3 lg:py-4 ">NIM</th>
-                        <th class="px-4 py-3 lg:py-4 ">Semester</th>
-                        <th class="px-4 py-3 lg:py-4 ">Nama Tugas</th>
-                        <th class="px-4 py-3 lg:py-4 ">File Tugas</th>
+                        <th class="px-4 py-3 lg:py-4 ">Tugas</th>
                         <th class="px-4 py-3 lg:py-4 ">Status</th>
                         <th scope="col" class="text-center mx-4 py-3 lg:py-4 ">Action</th>
                     </tr>
@@ -193,9 +195,28 @@
                             <td class="px-4 py-3 lg:py-4">{{ $data_tugas->firstItem() + $loop->index }}</td>
                             <td class="px-4 py-3 lg:py-4">{{ $tugas->mahasiswa->nama_mahasiswa }}</td>
                             <td class="px-4 py-3 lg:py-4">{{ $tugas->mahasiswa->nim }}</td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->mahasiswa->semester }}</td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->nama_tugas }}</td>
                             <td class="px-4 py-3 lg:py-4">
+                                <button type="button"
+                                    @click="showProject = true; 
+                                    idMahasiswa={{ $tugas->mahasiswa->id }}; 
+                                    idTugas={{ $tugas->id }};
+                                    namaTugas='{{ $tugas->nama_tugas }}';
+                                    project={{ $tugas->project }};"
+                                    class="flex items-center text-white justify-center bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center  md:me-0 mb-2 dark:focus:ring-green-900  md:items-center md:w-4/5 md:mx-4 space-x-2">
+                                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke="#CCCCCC" stroke-width="0.288"></g>
+                                        <g id="SVGRepo_iconCarrier">
+                                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#000000" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </g>
+                                        <span>{{ $tugas->nama_tugas }}</span>
+                                    </svg>
+                                </button>
+                            </td>
+                            {{-- <td class="px-4 py-3 lg:py-4">
                                 @php
                                     $filePath = asset($tugas->file_tugas);
                                     $fileExtension = pathinfo($tugas->file_tugas, PATHINFO_EXTENSION); // Ambil ekstensi file
@@ -214,10 +235,12 @@
                                     <a href="{{ $filePath }}" target="_blank" class="text-blue-500">Download
                                         File</a>
                                 @endif
-                            </td>
+                            </td> --}}
+
                             <td class="px-4 py-3 lg:py-4">
                                 {{ $tugas->status }}
                             </td>
+
                             <td class="px-4 py-3 lg:py-4 w-auto">
                                 <button type="button" @click="setujui = ! setujui ; idTugas='{{ $tugas->id }}';"
                                     class="flex items-center text-white justify-center bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center  md:me-0 mb-2 dark:focus:ring-green-900  md:items-center md:w-4/5 md:mx-4 space-x-2">
@@ -258,6 +281,52 @@
             </table>
         </div>
         {{ $data_tugas->links() }}
+
+        <div x-cloak x-show="showProject" x-transition
+            class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center overflow-auto">
+            <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="flex items-center justify-center py-3">
+                    <span class="text-xl font-semibold" x-text="namaTugas"></span>
+                </div>
+
+                <div class="overflow-auto lg:my-2 rounded-lg shadow-lg">
+                    <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400 ">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                            <tr class="">
+                                <th class="px-4 py-3 lg:py-4 ">No</th>
+                                <th class="px-4 py-3 lg:py-4 ">Nama Project</th>
+                                <th class="p-px-4 py-3 lg:py-4 ">File Project</th>
+                                <th class="px-4 py-3 lg:py-4 ">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template
+                                x-for="(projects, index) in project.filter(p => p.mahasiswa_id === idMahasiswa && p.tugas_id === idTugas)"
+                                :key="projects.id">
+                                <tr class="xl:text-base">
+                                    <td class="px-4 py-3 lg:py-4" x-text="index + 1"></td>
+                                    <td class="px-4 py-3 lg:py-4" x-text="projects.nama_project"></td>
+                                    <td class="px-4 py-3 lg:py-4" x-text="projects.file_project"></td>
+                                    <td class="px-4 py-3 lg:py-4" x-text="projects.status"></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <button @click="showProject = false" type="button"
+                    class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-toggle="deleteModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+        </div>
 
         <div x-cloak x-show="deleteAll" x-transition
             class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center">
