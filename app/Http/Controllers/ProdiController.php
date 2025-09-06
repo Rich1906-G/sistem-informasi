@@ -8,6 +8,6 @@ class ProdiController extends Controller
 {
     public function dashboard()
     {
-        return view('prodi.dashboard');
+        return view('prodi.dashboard', ['title' => 'Dashboard Prodi', 'header' => 'Dashboard Prodi']);
     }
 }
