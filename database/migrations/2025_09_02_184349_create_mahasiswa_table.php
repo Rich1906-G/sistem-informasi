@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('nama_mahasiswa');
             $table->string('nim');
             $table->string('semester');
+            $table->string('email');
+            $table->string('alamat');
             $table->string('no_hp');
             $table->string('pas_foto');
             $table->string('nama_pas_foto');

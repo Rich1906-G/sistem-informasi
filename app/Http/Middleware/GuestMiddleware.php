@@ -20,7 +20,7 @@ class GuestMiddleware
                 case 'Prodi':
                     return redirect()->route('prodi.dashboard');
                 case 'Mahasiswa':
-                    return redirect()->route('mahasiswa.dashboard');
+                    abort(403, 'Udah Login Kau Lek');
             }
         }
 
