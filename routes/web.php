@@ -22,6 +22,7 @@ Route::middleware('auth:account')->group(function () {
             Route::get('/data-mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa');
             Route::get('/tugas-mahasiswa', [AdminController::class, 'tugas'])->name('admin.tugas');
             Route::post('/ubah_status_tugas_mahasiswa/{id}', [AdminController::class, 'setujui_tugas'])->name('admin.setujui_tugas');
+            Route::get('/cari-data-mahasiswa', [AdminController::class, 'cari_data_mahasiswa'])->name('admin.cari_data_mahasiswa');
         });
     });
 

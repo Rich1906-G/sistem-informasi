@@ -71,7 +71,7 @@
             </div>
 
             <div class="w-full md:w-full lg:w-1/2">
-                <form action="#" method="GET">
+                <form action="{{ route('admin.cari_data_mahasiswa') }}" method="GET">
                     <div
                         class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0 lg:mb-0    lg:mx-0 lg:max-w-screen-lg">
                         <div class="relative w-full">
@@ -92,7 +92,7 @@
                                           sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
                                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                                           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Cara Data" type="search" id="search" name="search">
+                                placeholder="Cari Data Mahasiswa" type="search" id="search" name="search">
                         </div>
                         <div>
                             <button type="submit"
@@ -187,9 +187,9 @@
                             <td class="px-4 py-3 lg:py-4">{{ $mahasiswa->nim }}</td>
                             <td class="px-4 py-3 lg:py-4">{{ $mahasiswa->semester }}</td>
                             <td class="px-4 py-3 lg:py-4">{{ $mahasiswa->no_hp }}</td>
-                            <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
+                            <td class="flex-space-x-0 overflow-hidden">
                                 <img src="{{ asset($mahasiswa->pas_foto) }}"
-                                    class="rounded-full object-cover h-38"></img>
+                                    class="inline-block size-20 rounded-full ring-2 ring-white outline -outline-offset-1 outline-black/5"></img>
                             </td>
                             <td class="px-4 py-3 lg:py-4 w-auto">
                                 <a href="#"
