@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('logout') }}" class="block py-2 px-4 rounded hover:bg-red-700 transition">
+                <a href="{{ route('logout.mahasiswa') }}" class="block py-2 px-4 rounded hover:bg-red-700 transition">
                     🏃‍♂️ Logout
                 </a>
             </li>

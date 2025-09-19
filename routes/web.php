@@ -21,9 +21,9 @@ Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'loginMahasiswa'])->name('login.mahasiswa');
     });
 
-
-
-    Route::post('/auth', [AuthController::class, 'auth'])->name('login.submit');
+    Route::post('/auth-admin', [AuthController::class, 'authAdmin'])->name('login.admin.submit');
+    Route::post('/auth-prodi', [AuthController::class, 'authProdi'])->name('login.prodi.submit');
+    Route::post('/auth-mahasiswa', [AuthController::class, 'authMahasiswa'])->name('login.mahasiswa.submit');
 });
 
 Route::middleware('auth:account')->group(function () {
@@ -51,7 +51,7 @@ Route::middleware('auth:account')->group(function () {
         });
     });
 
-    Route::get('/logout', [AuthController::class, 'logoutAdmin'])->name('logout.admin');
-    Route::get('/logout', [AuthController::class, 'logoutDosen'])->name('logout.dosen');
-    Route::get('/logout', [AuthController::class, 'logoutMahasiswa'])->name('logout.mahasiswa');
+    Route::get('/logout-admin', [AuthController::class, 'logoutAdmin'])->name('logout.admin');
+    Route::get('/logout-prodi', [AuthController::class, 'logoutDosen'])->name('logout.dosen');
+    Route::get('/logout-mahasiswa', [AuthController::class, 'logoutMahasiswa'])->name('logout.mahasiswa');
 });
