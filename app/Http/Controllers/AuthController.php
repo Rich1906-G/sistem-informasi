@@ -9,9 +9,17 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function loginAdmin()
     {
-        return view('auth.login');
+        return view('auth.admin.login');
+    }
+    public function loginDosen()
+    {
+        return view('auth.dosen-dokter.login');
+    }
+    public function loginMahasiswa()
+    {
+        return view('auth.mahasiswa.login');
     }
 
     public function auth(Request $request)
@@ -35,13 +43,25 @@ class AuthController extends Controller
             }
         }
 
-        return redirect()->route('login');
+        return redirect()->route('login.admin');
     }
 
-    public function logout()
+    public function logoutAdmin()
     {
         Auth::guard('account')->logout();
 
-        return redirect()->route('login');
+        return redirect()->route('login.admin');
+    }
+    public function logoutDosen()
+    {
+        Auth::guard('account')->logout();
+
+        return redirect()->route('login.dosen');
+    }
+    public function logoutMahasiswa()
+    {
+        Auth::guard('account')->logout();
+
+        return redirect()->route('login.mahasiswa');
     }
 }

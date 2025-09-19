@@ -189,7 +189,7 @@
                     @foreach ($data_tugas as $tugas)
                         <tr class="xl:text-base">
                             <td class="px-4 py-3 lg:py-4">{{ $data_tugas->firstItem() + $loop->index }}</td>
-                            <td class="px-4 py-3 lg:py-4">
+                            <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
                                 <button type="button"
                                     @click="showProject = true; 
                                     namaTugas='{{ $tugas->nama_tugas }}'

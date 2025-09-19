@@ -11,7 +11,18 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::prefix('admin')->group(function () {
+        Route::get('/login', [AuthController::class, 'loginAdmin'])->name('login.admin');
+    });
+    Route::prefix('dosen')->group(function () {
+        Route::get('/login', [AuthController::class, 'loginDosen'])->name('login.dosen');
+    });
+    Route::prefix('mahasiswa')->group(function () {
+        Route::get('/login', [AuthController::class, 'loginMahasiswa'])->name('login.mahasiswa');
+    });
+
+
+
     Route::post('/auth', [AuthController::class, 'auth'])->name('login.submit');
 });
 
@@ -40,5 +51,7 @@ Route::middleware('auth:account')->group(function () {
         });
     });
 
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/logout', [AuthController::class, 'logoutAdmin'])->name('logout.admin');
+    Route::get('/logout', [AuthController::class, 'logoutDosen'])->name('logout.dosen');
+    Route::get('/logout', [AuthController::class, 'logoutMahasiswa'])->name('logout.mahasiswa');
 });

@@ -12,7 +12,7 @@ class RoleMiddleware
     public function handle($request, Closure $next, $role)
     {
         if (!Auth::guard('account')->check()) {
-            return redirect()->route('login');
+            return redirect()->route('login.admin');
         }
 
         $user = Auth::guard('account')->user();
