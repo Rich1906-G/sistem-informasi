@@ -22,7 +22,7 @@ class AuthController extends Controller
         return view('auth.mahasiswa.login');
     }
 
-    public function auth(Request $request)
+    public function authAdmin(Request $request)
     {
         $credentials = $request->validate([
             'username' => 'required',
@@ -36,14 +36,59 @@ class AuthController extends Controller
 
             if ($account->role === 'Admin') {
                 return redirect()->route('admin.dashboard');
-            } elseif ($account->role === 'Prodi') {
-                return redirect()->route('prodi.dashboard');
-            } elseif ($account->role === 'Mahasiswa') {
-                return redirect()->route('mahasiswa.dashboard');
+            } else {
+                Auth::guard('account')->logout();
+                return redirect()->back();
             }
         }
 
-        return redirect()->route('login.admin');
+        return redirect()->back();
+    }
+
+    public function authMahasiswa(Request $request)
+    {
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::guard('account')->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $account = Auth::guard('account')->user();
+
+            if ($account->role === 'Mahasiswa') {
+                return redirect()->route('mahasiswa.dashboard');
+            } else {
+                Auth::guard('account')->logout();
+                return redirect()->back();
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    public function authProdi(Request $request)
+    {
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if (Auth::guard('account')->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $account = Auth::guard('account')->user();
+
+            if ($account->role === 'Prodi') {
+                return redirect()->route('prodi.dashboard');
+            } else {
+                Auth::guard('account')->logout();
+                return redirect()->back();
+            }
+        }
+
+        return redirect()->back();
     }
 
     public function logoutAdmin()
