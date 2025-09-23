@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mahasiswa_id')
-                ->constrained('mahasiswa', 'id', 'tugas_mahasiswa_id')
+            $table->foreignId('prodi_id')
+                ->constrained('prodi', 'id', 'tugas_prodi_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_tugas');
-            $table->enum('status', ['Disetujui', 'Tidak Disetujui']);
             $table->timestamps();
         });
     }

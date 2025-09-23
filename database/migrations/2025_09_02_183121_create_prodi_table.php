@@ -17,7 +17,7 @@ return new class extends Migration
                 ->constrained('account', 'id', indexName: 'prodi_account_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_prodi');
-            $table->string('nama_kaprodi');
+            $table->string('nama_kaprodi')->nullable();
             $table->timestamps();
         });
     }

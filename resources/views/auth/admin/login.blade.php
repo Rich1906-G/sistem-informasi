@@ -88,7 +88,7 @@
             </div>
 
             <div class="flex flex-col gap-4 my-5 pt-5 w-auto px-5">
-                <label class="text-3xl font-bold">Sistem Informasi Rumah Sakit Gigi Dan Mulut</label>
+                <label class="text-3xl font-bold">Sistem Informasi </label>
 
                 <div class="grid bg-gray-100 p-4 rounded-md">
                     <label class="font-light text-2xl">LOGIN ADMIN</label>

@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             MahasiswaSeeder::class,
             TugasSeeder::class,
             ProjectSeeder::class,
-        ]); 
+            MahasiswaTugasSeeder::class,
+            MahasiswaProjectSeeder::class,
+        ]);
     }
 }

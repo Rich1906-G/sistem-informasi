@@ -16,63 +16,13 @@ class TugasSeeder extends Seeder
         $fileName = "Final Presentation David Richardo Gultom.pptx";
 
         Tugas::create([
-            'mahasiswa_id' => 1,
+            'prodi_id' => 1,
             'nama_tugas' => 'Tugas Laravel',
-            'status'  => 'Tidak Disetujui'
         ]);
 
         Tugas::create([
-            'mahasiswa_id' => 1,
+            'prodi_id' => 1,
             'nama_tugas' => 'Tugas Mobile',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 2,
-            'nama_tugas' => 'Tugas Laravel',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 2,
-            'nama_tugas' => 'Tugas Mobile',
-            'status'  => 'Tidak Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 3,
-            'nama_tugas' => 'Tugas Laravel',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 3,
-            'nama_tugas' => 'Tugas Mobile',
-            'status'  => 'Tidak Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 4,
-            'nama_tugas' => 'Tugas Laravel',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 4,
-            'nama_tugas' => 'Tugas Mobile',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 5,
-            'nama_tugas' => 'Tugas Laravel',
-            'status'  => 'Disetujui'
-        ]);
-
-        Tugas::create([
-            'mahasiswa_id' => 5,
-            'nama_tugas' => 'Tugas Mobile',
-            'status'  => 'Disetujui'
         ]);
     }
 }
