@@ -78,17 +78,5 @@ class MahasiswaSeeder extends Seeder
             'pas_foto' => 'storage/' . $nama_pas_foto_david,
             'nama_pas_foto' => $nama_pas_foto_david,
         ]);
-
-
-
-        // Mahasiswa::create([
-        //     'account_id' => 8,
-        //     'nama_mahasiswa' => 'David Richardo Gultom',
-        //     'nim' => fake()->unique()->numberBetween(1000, 9999),
-        //     'semester' => '7',
-        //     'no_hp' => '082268742976',
-        //     'pas_foto' => 'storage/' . $fileName,
-        //     'nama_pas_foto' => $fileName,
-        // ]);
     }
 }

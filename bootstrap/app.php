@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Middleware\CheckRoleMiddleware;
+use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\GuestMiddleware;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;

@@ -16,6 +16,9 @@
             dropDownHp: false,
             showProject: false,
             namaTugas: '',
+            formUploadTugas: false,
+            idTugas: null,
+            idProject: null,
             detailTugas: [],
         }">
         <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
@@ -191,10 +194,15 @@
                             <td class="px-4 py-3 lg:py-4">{{ $data_tugas->firstItem() + $loop->index }}</td>
                             <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
                                 <button type="button"
-                                    @click="showProject = true; 
-                                    namaTugas='{{ $tugas->nama_tugas }}'
-                                    detailTugas={{ $tugas->project }};"
-                                    class="flex items-center text-white justify-center bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center  md:me-0 mb-2 dark:focus:ring-green-900  md:items-center md:w-4/5 md:mx-4 space-x-2">
+                                    @click="showProject = !showProject;
+                                    namaTugas='{{ $tugas->nama_tugas }}';
+                                    detailTugas=@js($tugas->project);
+                                    idTugas='{{ $tugas->id }}';"
+                                    class="flex
+                                    items-center text-white justify-center bg-green-400 hover:bg-green-500
+                                    focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md
+                                    lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center md:me-0 mb-2
+                                    dark:focus:ring-green-900 md:items-center md:w-4/5 md:mx-4 space-x-2">
                                     <svg height="20" width="20" viewBox="0 0 24 24" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -202,13 +210,14 @@
                                             stroke="#CCCCCC" stroke-width="0.288"></g>
                                         <g id="SVGRepo_iconCarrier">
                                             <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#000000" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                            </path>
                                         </g>
                                         <span>{{ $tugas->nama_tugas }}</span>
                                     </svg>
                                 </button>
                             </td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->status }}</td>
+                            <td class="px-4 py-3 lg:py-4">{{ $tugas->pivot->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -230,8 +239,10 @@
                             <tr class="">
                                 <th class="px-4 py-3 lg:py-4 ">No</th>
                                 <th class="px-4 py-3 lg:py-4 ">Nama Project</th>
-                                <th class="p-px-4 py-3 lg:py-4 ">File Project</th>
-                                <th class="px-4 py-3 lg:py-4 ">Status</th>
+                                <th class="px-4 py-3 lg:py-4">Nama File Project</th>
+                                <th class="px-4 py-3 lg:py-4">File Project</th>
+                                <th class="px-4 py-3 lg:p-4">Status</th>
+                                <th class="px-4 py-3 lg:py-4 ">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -239,8 +250,44 @@
                                 <tr class="xl:text-base">
                                     <td class="px-4 py-3 lg:py-4" x-text="index + 1"></td>
                                     <td class="px-4 py-3 lg:py-4" x-text="projects.nama_project"></td>
-                                    <td class="px-4 py-3 lg:py-4" x-text="projects.file_project"></td>
-                                    <td class="px-4 py-3 lg:py-4" x-text="projects.status"></td>
+                                    <td class="px-4 py-3 lg:py-4" x-text="projects.nama_file_project"></td>
+                                    <td class="px-4 py-3 lg:p-4" x-text="projects.file_project">Test
+                                    </td>
+                                    <td class="px-4 py-3 lg:p-4" x-text="projects.status"></td>
+                                    <td class="px-4 py-3 lg:py-4 grid gap-4" x-data="{ filename: '' }">
+                                        <!-- Button Upload -->
+                                        <button
+                                            @click="formUploadTugas = !formUploadTugas;  idProject = projects"
+                                            class="flex items-center justify-between gap-2 bg-green-500 hover:bg-green-600 px-5 py-2.5 rounded-md text-white">
+                                            <span>Upload Project</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                                                <path
+                                                    d="M440-200h80v-167l64 64 56-57-160-160-160 160 57 56 63-63v167ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+                                            </svg>
+                                        </button>
+
+                                        <button
+                                            class="flex items-center justify-between bg-orange-400 hover:bg-orange-500 px-5 py-2.5 gap-2 rounded-md text-white">
+                                            <span>Edit Project</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                                                <path
+                                                    d="M560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v120h-80v-80H520v-200H240v640h240v80H240Zm280-400Zm241 199-19-18 37 37-18-19Z" />
+                                            </svg>
+                                        </button>
+
+
+                                        <button
+                                            class="flex items-center justify-between gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 rounded-md text-white">
+                                            <span>Hapus Project</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                                                <path
+                                                    d="M240-800v200-200 640-9.5 9.5-640Zm0 720q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v174q-19-7-39-10.5t-41-3.5v-120H520v-200H240v640h254q8 23 20 43t28 37H240Zm396-20-56-56 84-84-84-84 56-56 84 84 84-84 56 56-83 84 83 84-56 56-84-83-84 83Z" />
+                                            </svg>
+                                        </button>
+                                    </td>
                                 </tr>
                             </template>
                         </tbody>
@@ -336,5 +383,52 @@
                 </form>
             </div>
         </div>
+
+        <!-- Form Upload (muncul kalau diklik) -->
+        <div x-show="formUploadTugas" class="fixed inset-0 bg-black/50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-[700px]">
+                <h2 class="text-xl font-bold mb-4">Upload Project</h2>
+
+                <form action="{{ route('mahasiswa.upload.project') }}" method="POST" enctype="multipart/form-data"
+                    class="grid gap-4">
+                    @csrf
+
+                    <input type="hidden" name="tugas_id" :value="idTugas">
+                    <input type="hidden" name="project_id" :value="idProject?.id">
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama
+                            Project</label>
+                        <input type="text" name="nama_project" readonly :value="idProject?.nama_project"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama File
+                            Project</label>
+                        <input type="text" name="nama_file_project"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">File
+                            Project</label>
+                        <input type="file" name="file_project" accept="application/pdf"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="formUploadTugas = false"
+                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
+                            Batal
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </x-layout-mahasiswa>

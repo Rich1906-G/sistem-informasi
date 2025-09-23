@@ -21,7 +21,7 @@ class AccountSeeder extends Seeder
         ]);
 
         Account::create([
-            'username' => 'prodi',
+            'username' => 'agung',
             'password' => Hash::make('passwordProdi'),
             'role' => 'Prodi',
         ]);
@@ -32,7 +32,7 @@ class AccountSeeder extends Seeder
             'role' => 'Mahasiswa',
         ]);
 
-        Account::create([
+        Account::create(attributes: [
             'username' => 'Adrian',
             'password' => Hash::make('passwordMahasiswa'),
             'role' => 'Mahasiswa',

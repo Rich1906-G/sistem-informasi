@@ -11,23 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project', function (Blueprint $table) {
+        Schema::create('mahasiswa_project', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tugas_id')->constrained('tugas', 'id', 'project_tugas_id')
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswa', 'id', 'mahasiswa_project_mahasiswa_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('nama_project');
-            $table->string('nama_file_project')->nullable();
-            $table->string('file_project')->nullable();
-            $table->enum('status', ['Belum Submit', 'Sudah Submit'])->defatul('Belum Submit');
+            $table->foreignId('project_id')->constrained('project', 'id', 'mahasiswa_project_project_id')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('project');
+        Schema::dropIfExists('mahasiswa_project');
     }
 };

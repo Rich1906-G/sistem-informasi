@@ -13,17 +13,16 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/login', [AuthController::class, 'loginAdmin'])->name('login.admin');
+        Route::post('/auth-admin', [AuthController::class, 'authAdmin'])->name('login.admin.submit');
     });
-    Route::prefix('dosen')->group(function () {
-        Route::get('/login', [AuthController::class, 'loginDosen'])->name('login.dosen');
+    Route::prefix('prodi')->group(function () {
+        Route::get('/login', [AuthController::class, 'loginProdi'])->name('login.prodi');
+        Route::post('/auth-prodi', [AuthController::class, 'authProdi'])->name('login.prodi.submit');
     });
     Route::prefix('mahasiswa')->group(function () {
         Route::get('/login', [AuthController::class, 'loginMahasiswa'])->name('login.mahasiswa');
+        Route::post('/auth-mahasiswa', [AuthController::class, 'authMahasiswa'])->name('login.mahasiswa.submit');
     });
-
-    Route::post('/auth-admin', [AuthController::class, 'authAdmin'])->name('login.admin.submit');
-    Route::post('/auth-prodi', [AuthController::class, 'authProdi'])->name('login.prodi.submit');
-    Route::post('/auth-mahasiswa', [AuthController::class, 'authMahasiswa'])->name('login.mahasiswa.submit');
 });
 
 Route::middleware('auth:account')->group(function () {
@@ -40,6 +39,13 @@ Route::middleware('auth:account')->group(function () {
     Route::middleware(['role:Prodi'])->group(function () {
         Route::prefix('prodi')->group(function () {
             Route::get('/dashboard', [ProdiController::class, 'dashboard'])->name('prodi.dashboard');
+            Route::get('/tugas-mahasiswa', [ProdiController::class, 'tugasMahasiswa'])->name('prodi.tugas.mahasiswa');
+            Route::post('/setujui-status-tugas/{id}/mahasiswa/{mahsiswa_id}', [ProdiController::class, 'setujui_tugas'])->name('prodi.setujui.tugas');
+            Route::post('/tolak-status-tugas/{id}/mahasiswa/{mahsiswa_id}', [ProdiController::class, 'tolak_tugas'])->name('prodi.tolak.tugas');
+            Route::post('/tambah-tugas-mahasiswa/{prodi_id}', [ProdiController::class, 'tambahTugasMahasiswa'])->name('prodi.tambah.tugas.mahasiswa');
+            Route::post('/tambah-project-mahasiswa', [ProdiController::class, 'tambahProjectMahasiswa'])->name('prodi.tambah.project.mahasiswa');
+            Route::get('/project-mahasiswa', [ProdiController::class, 'projectMahasiswa'])->name('prodi.project.mahasiswa');
+            Route::get('/logout', [AuthController::class, 'logoutDosen'])->name('logout.dosen');
         });
     });
 
@@ -48,10 +54,10 @@ Route::middleware('auth:account')->group(function () {
             Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard');
             Route::get('/data-mahasiswa', [MahasiswaController::class, 'mahasiswa'])->name('mahasiswa.mahasiswa');
             Route::get('/tugas-mahasiswa', [MahasiswaController::class, 'tugas'])->name('mahasiswa.tugas');
+            Route::post('/upload-project-mahasiswa', [MahasiswaController::class, 'uploadProject'])->name('mahasiswa.upload.project');
         });
     });
 
     Route::get('/logout-admin', [AuthController::class, 'logoutAdmin'])->name('logout.admin');
-    Route::get('/logout-prodi', [AuthController::class, 'logoutDosen'])->name('logout.dosen');
     Route::get('/logout-mahasiswa', [AuthController::class, 'logoutMahasiswa'])->name('logout.mahasiswa');
 });

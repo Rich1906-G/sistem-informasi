@@ -14,13 +14,14 @@ class Mahasiswa extends Model
     {
         return $this->belongsTo(Account::class);
     }
-    public function project()
-    {
-        return $this->hasMany(Project::class);
-    }
 
     public function tugas()
     {
-        return $this->hasMany(Tugas::class);
+        return $this->belongsToMany(Tugas::class, 'mahasiswa_tugas', 'mahasiswa_id', 'tugas_id')->withPivot(['status'])->withTimestamps();
+    }
+
+    public function project()
+    {
+        return $this->belongsToMany(Project::class, 'mahasiswa_project', 'mahasiswa_id', 'project_id');
     }
 }
