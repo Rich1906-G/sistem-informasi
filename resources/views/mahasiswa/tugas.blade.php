@@ -65,47 +65,35 @@
                     <tr class="">
                         <th class="px-4 py-3 lg:py-4 ">No</th>
                         <th class="px-4 py-3 lg:py-4 ">Nama Tugas</th>
-                        <th class="px-4 py-3 lg:py-4 ">Status</th>
-                        {{-- <th scope="col" class="text-center mx-4 py-3 lg:py-4 ">Action</th> --}}
+                        {{-- <th class="px-4 py-3 lg:py-4 ">Status</th> --}}
+                        <th scope="col" class="text-center mx-4 py-3 lg:py-4 ">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($data_tugas as $tugas)
+                    @foreach ($dataTugas as $tugas)
                         <tr class="xl:text-base">
-                            <td class="px-4 py-3 lg:py-4">{{ $data_tugas->firstItem() + $loop->index }}</td>
-                            <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
-                                <button type="button"
-                                    @click="showProject = !showProject;
-                                    namaTugas='{{ $tugas->nama_tugas }}';
-                                    detailTugas=@js($tugas->project);
-                                    idTugas='{{ $tugas->id }}';"
-                                    class="flex
-                                    items-center text-white justify-center bg-green-400 hover:bg-green-500
-                                    focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md
-                                    lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center md:me-0 mb-2
-                                    dark:focus:ring-green-900 md:items-center md:w-4/5 md:mx-4 space-x-2">
-                                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke="#CCCCCC" stroke-width="0.288"></g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#000000" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round">
-                                            </path>
-                                        </g>
-                                        <span>{{ $tugas->nama_tugas }}</span>
-                                    </svg>
-                                </button>
+                            <td class="px-4 py-3 lg:p-4">{{ $dataTugas->firstItem() + $loop->index }}</td>
+                            <td class="px-4 py-3 lg:p-4">
+                                {{ $tugas->nama_tugas ?? 'Tidak ada tugas' }}
                             </td>
-                            <td class="px-4 py-3 lg:py-4">
-                                {{ $tugas->status }}</td>
+                            {{-- <td class="px-4 py-3 lg:py-4"></td> --}}
+                            <td class="px-4 py-3 lg:py-4 text-center">
+                                <a href="{{ route('mahasiswa.project', $tugas->slug) }}"
+                                    class="inline-flex items-center justify-center w-44 py-2 px-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                        width="24px" fill="#FFFFFF">
+                                        <path
+                                            d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
+                                    </svg>
+                                    <span>Lihat Detail Project</span>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        {{ $data_tugas->links() }}
+        {{ $dataTugas->links() }}
 
 
         <div x-cloak x-show="showProject" x-transition

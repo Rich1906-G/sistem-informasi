@@ -38,7 +38,16 @@ class MahasiswaController extends Controller
     {
         $dataTugas = Tugas::with('project')->paginate(10);
 
-        return view('mahasiswa.tugas', compact('dataTugas', 'data_project'), ['title' => 'Data Tugas', 'header' => 'Data Tugas']);
+        return view('mahasiswa.tugas', compact('dataTugas'), ['title' => 'Data Tugas', 'header' => 'Data Tugas']);
+    }
+
+    public function project($slug)
+    {
+        $dataTugas = Tugas::with('project')->where('slug', $slug)->firstOrFail();
+
+        $dataProject = $dataTugas->project()->paginate(10);
+
+        return view('mahasiswa.project', compact('dataTugas', 'dataProject'), ['title' => 'Detail Project']);
     }
 
     public function uploadProject(Request $request)
@@ -53,12 +62,14 @@ class MahasiswaController extends Controller
         $idAkun = Auth::guard('account')->id();
         $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
 
+        // dd($mahasiswa);
+
         $project = Project::findOrFail($request->project_id);
 
         // Jika ada file baru, simpan dan update jalurnya
         if ($request->hasFile('file_project')) {
             $file = $request->file('file_project');
-            $namaFile = time() . '-' . $request->nama_file_project . '.' . $file->getClientOriginalExtension();
+            $namaFile = $request->nama_file_project . '.' . $file->getClientOriginalExtension();
             $jalur = $file->storeAs('Tugas-Mahasiswa', $namaFile, 'public');
             $project->file_project = $jalur;
 
@@ -80,17 +91,16 @@ class MahasiswaController extends Controller
 
     public function updateProject(Request $request)
     {
-        $request->validate([
-            'project_id' => ['required', 'exists:project,id'],
-            'mahasiswa_id' => ['required', 'exists:mahasiswa,id'],
-            'nama_file_project' => ['required'],
-            'file_project' => ['nullable', 'mimes:pdf'],
-        ]);
+        $project = Project::findOrFail($request->project_id);
 
         $idAkun = Auth::guard('account')->id();
         $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
 
-        $project = Project::findOrFail($request->project_id);
+        $request->validate([
+            'project_id' => ['required', 'exists:project,id'],
+            'nama_file_project' => ['required'],
+            'file_project' => ['nullable', 'mimes:pdf'],
+        ]);
 
         if ($request->hasFile('file_project')) {
             if ($project->file_project && Storage::disk('public')->exists($project->file_project)) {
@@ -109,7 +119,6 @@ class MahasiswaController extends Controller
             // Kalau tidak upload file baru, tetap update status
             $project->update([
                 'nama_file_project' => $request->nama_file_project,
-                'status' => 'Sudah Submit'
             ]);
         }
 
