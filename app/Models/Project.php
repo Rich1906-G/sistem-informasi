@@ -10,6 +10,8 @@ class Project extends Model
 
     protected $guarded = [];
 
+    protected $dateFormat = 'U';
+
     public function tugas()
     {
         return $this->belongsTo(Tugas::class);

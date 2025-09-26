@@ -180,7 +180,7 @@
                         <label for="tugas_id" class="block font-medium">Pilih Tugas</label>
                         <select name="tugas_id" id="tugas_id" class="w-full border rounded p-2">
                             <template x-for="tugas in dataTugas" :key="tugas.id">
-                                <option :value="tugas.tugas_id" x-text="tugas.nama_tugas"></option>
+                                <option :value="tugas.id" x-text="tugas.nama_tugas"></option>
                             </template>
                         </select>
                     </div>

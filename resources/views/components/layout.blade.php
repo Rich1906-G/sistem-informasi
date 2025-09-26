@@ -12,8 +12,6 @@
 
     <x-sidebar></x-sidebar>
 
-
-
     <!-- Content -->
     <main class="flex-1">
         <x-header>{{ $header }}</x-header>

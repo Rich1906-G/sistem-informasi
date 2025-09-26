@@ -16,12 +16,12 @@ class TugasSeeder extends Seeder
         $fileName = "Final Presentation David Richardo Gultom.pptx";
 
         Tugas::create([
-            'prodi_id' => 1,
+            'admin_id' => 1,
             'nama_tugas' => 'Tugas Laravel',
         ]);
 
         Tugas::create([
-            'prodi_id' => 1,
+            'admin_id' => 1,
             'nama_tugas' => 'Tugas Mobile',
         ]);
     }

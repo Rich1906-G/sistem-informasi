@@ -17,6 +17,7 @@
             showProject: false,
             namaTugas: '',
             formUploadTugas: false,
+            formUpdateTugas: false,
             idTugas: null,
             idProject: null,
             detailTugas: [],
@@ -217,7 +218,8 @@
                                     </svg>
                                 </button>
                             </td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->pivot->status }}</td>
+                            <td class="px-4 py-3 lg:py-4">
+                                {{ $tugas->status }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -256,8 +258,7 @@
                                     <td class="px-4 py-3 lg:p-4" x-text="projects.status"></td>
                                     <td class="px-4 py-3 lg:py-4 grid gap-4" x-data="{ filename: '' }">
                                         <!-- Button Upload -->
-                                        <button
-                                            @click="formUploadTugas = !formUploadTugas;  idProject = projects"
+                                        <button @click="formUploadTugas = !formUploadTugas;  idProject = projects"
                                             class="flex items-center justify-between gap-2 bg-green-500 hover:bg-green-600 px-5 py-2.5 rounded-md text-white">
                                             <span>Upload Project</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
@@ -267,7 +268,7 @@
                                             </svg>
                                         </button>
 
-                                        <button
+                                        <button @click="formUpdateTugas = !formUpdateTugas; idProject = projects"
                                             class="flex items-center justify-between bg-orange-400 hover:bg-orange-500 px-5 py-2.5 gap-2 rounded-md text-white">
                                             <span>Edit Project</span>
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
@@ -419,6 +420,50 @@
 
                     <div class="flex justify-end gap-2">
                         <button type="button" @click="formUploadTugas = false"
+                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
+                            Batal
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div x-show="formUpdateTugas" class="fixed inset-0 bg-black/50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-[700px]">
+                <h2 class="text-xl font-bold mb-4">Update Project</h2>
+
+                <form action="{{ route('mahasiswa.update.project') }}" method="POST" enctype="multipart/form-data"
+                    class="grid gap-4">
+                    @csrf
+
+                    <input type="hidden" name="tugas_id" :value="idTugas">
+                    <input type="hidden" name="project_id" :value="idProject?.id">
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama
+                            Project</label>
+                        <input type="text" name="nama_project" readonly :value="idProject?.nama_project"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama File Project</label>
+                        <input type="text" name="nama_file_project" :value="idProject?.nama_file_project"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">File Project</label>
+                        <input type="file" name="file_project" accept="application/pdf"
+                            :value="idProject?.nama_file_project"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="formUpdateTugas = false"
                             class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
                             Batal
                         </button>

@@ -55,6 +55,7 @@ Route::middleware('auth:account')->group(function () {
             Route::get('/data-mahasiswa', [MahasiswaController::class, 'mahasiswa'])->name('mahasiswa.mahasiswa');
             Route::get('/tugas-mahasiswa', [MahasiswaController::class, 'tugas'])->name('mahasiswa.tugas');
             Route::post('/upload-project-mahasiswa', [MahasiswaController::class, 'uploadProject'])->name('mahasiswa.upload.project');
+            Route::post('/update-project-mahasiswa', [MahasiswaController::class, 'updateProject'])->name('mahasiswa.update.project');
         });
     });
 

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama_file_project')->nullable();
             $table->string('file_project')->nullable();
             $table->enum('status', ['Belum Submit', 'Sudah Submit'])->defatul('Belum Submit');
-            $table->timestamps();
+            $table->timestampTz('testing');
         });
     }
 
