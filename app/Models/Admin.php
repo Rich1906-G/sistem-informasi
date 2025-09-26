@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Admin extends Model
 {
@@ -13,5 +14,10 @@ class Admin extends Model
     public function account()
     {
         return $this->belongsTo(Account::class);
+    }
+
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class);
     }
 }

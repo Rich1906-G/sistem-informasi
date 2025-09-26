@@ -36,18 +36,9 @@ class MahasiswaController extends Controller
 
     public function tugas()
     {
-        $idAkun = Auth::guard('account')->id();
-        $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
+        $dataTugas = Tugas::with('project')->paginate(10);
 
-        $data_tugas = Tugas::paginate(10);
-
-        // dd($data);
-
-        $data_project = $mahasiswa->tugas()->with('project')->where('mahasiswa_id', $mahasiswa->id)->paginate(10);
-
-        // dd($data_tugas);
-
-        return view('mahasiswa.tugas', compact('data_tugas', 'data_project'), ['title' => 'Data Tugas', 'header' => 'Data Tugas']);
+        return view('mahasiswa.tugas', compact('dataTugas', 'data_project'), ['title' => 'Data Tugas', 'header' => 'Data Tugas']);
     }
 
     public function uploadProject(Request $request)

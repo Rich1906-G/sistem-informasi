@@ -14,8 +14,14 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.tugas') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
-                    📝 Tugas
+                <a href="{{ route('admin.data.tugas') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                    📝 Data Tugas
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.tugas.mahasiswa') }}"
+                    class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                    📝 Tugas Mahasiswa
                 </a>
             </li>
             <li>

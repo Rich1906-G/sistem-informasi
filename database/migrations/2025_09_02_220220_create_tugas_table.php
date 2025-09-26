@@ -17,6 +17,7 @@ return new class extends Migration
                 ->constrained('admin', 'id', 'tugas_admin_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_tugas');
+            $table->string('slug');
             $table->timestamps();
         });
     }

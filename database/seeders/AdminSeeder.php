@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
             'account_id' => 1,
             'nama' => 'David Richardo Gultom',
             'email' => 'davidgultomm@gmail.com',
-            'no_hp' => '082268742976',  
+            'no_hp' => '082268742976',
         ]);
     }
 }

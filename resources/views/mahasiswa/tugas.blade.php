@@ -24,65 +24,6 @@
         }">
         <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
 
-            {{-- Dropdown Laptop s/d PC --}}
-            <div class="hidden lg:inline lg:w-auto">
-                <button @click="dropDownLaptop = !dropDownLaptop"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    Action Menu
-                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
-                    </svg>
-                </button>
-
-                <!-- Dropdown menu -->
-                <div x-show="dropDownLaptop" @click.away="dropDownLaptop = false" x-cloak
-                    class="z-auto absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                        <li>
-                            <a href='#'
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
-                                Data Contract</a>
-                        </li>
-                        <li>
-                            <form action='#' method="POST" enctype="multipart/form-data"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                                id="uploadFile">
-                                @csrf
-                                <label style="cursor:pointer">Import Data
-                                    <input id="fileInput" name="excel_file" type="file" class="hidden"
-                                        onchange="handleFileUpload()" />
-                                </label>
-                            </form>
-                            <script>
-                                function handleFileUpload() {
-                                    const fileInput = document.getElementById('fileInput');
-                                    if (fileInput.files.length > 0) {
-                                        document.getElementById('uploadFile').submit();
-                                    }
-                                }
-                            </script>
-                        </li>
-                        <li>
-                            <form action="'#'" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <button type="submit" @click="side = false"
-                                    class="w-full flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    Data
-                                </button>
-                            </form>
-                        </li>
-                        <li>
-                            <button type="button" @click="deleteAll = ! deleteAll; dropDownLaptop = false"
-                                class="w-full flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete
-                                All Data</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
             <div class="w-full md:w-full lg:w-1/2">
                 <form action="#" method="GET">
                     <div
@@ -105,7 +46,7 @@
                                           sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
                                           dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                                           dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Cara Data" type="search" id="search" name="search">
+                                placeholder="Cara Data Tugas" type="search" id="search" name="search">
                         </div>
                         <div>
                             <button type="submit"
@@ -116,67 +57,6 @@
                 </form>
             </div>
 
-        </div>
-
-        {{-- Dropdown Hp s/d md --}}
-        <div class="md:flex md:items-end justify-end ">
-            <div class="w-full flex flex-col items-center p-4 md:w-48 md:mx-2 lg:hidden">
-                <button @click="dropDownHp = !dropDownHp"
-                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    <label class="flex items-center justify-center"> Action
-                        Menu <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg></label>
-                </button>
-
-                <!-- DropdownHP menu -->
-                <div x-show="dropDownHp" @click.away="dropDownHp = false" x-cloak
-                    class="z-auto absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropDownHandphone">
-                        <li>
-                            <a href='#'
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
-                                Data Contract</a>
-                        </li>
-                        <li>
-                            <form action='#' method="POST" enctype="multipart/form-data"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                style="cursor:pointer" id="uploadFile">
-                                @csrf
-                                <label style="cursor:pointer">Import Data
-                                    <input id="fileInput" name="excel_file" type="file" class="hidden"
-                                        onchange="handleFileUpload()" />
-                                </label>
-                            </form>
-                            <script>
-                                function handleFileUpload() {
-                                    const fileInput = document.getElementById('fileInput');
-                                    if (fileInput.files.length > 0) {
-                                        document.getElementById('uploadFile').submit();
-                                    }
-                                }
-                            </script>
-                        </li>
-                        <li>
-                            <form action="#" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    Data
-                                </button>
-                            </form>
-                        </li>
-                        <li>
-                            <button type="button" @click="deleteAll = ! deleteAll; dropDownHp = false"
-                                class="w-full flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete
-                                All Data</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
 
         <div class="overflow-auto lg:my-2 ">

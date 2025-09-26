@@ -16,7 +16,7 @@ class AccountSeeder extends Seeder
     {
         Account::create([
             'username' => 'admin',
-            'password' => Hash::make('passwordAdmin'),
+            'password' => Hash::make(value: 'passwordAdmin'),
             'role' => 'Admin',
         ]);
 

@@ -1,4 +1,5 @@
 <x-layout>
+
     <x-slot:title>
         {{ $title }}
     </x-slot:title>
@@ -9,76 +10,29 @@
 
     <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg relative md:mx-4 lg:mx-4 xl:my-8 xl:mx-4"
         x-data="{
-            deleteAll: false,
-            dropDownLaptop: false,
-            dropDownHp: false,
-            setujui: false,
-            idTugas: null,
-            tidakDisetujui: false,
-            showProject: false,
-            idMahasiswa: null,
-            project: [],
+            openModalCreateTugas: false,
+            openModalUpdateTugas: false,
+            openModalDeleteTugas: false,
             namaTugas: '',
+            idTugas: [],
+            idAdmin: [],
+            dataTugas: [],
         }">
+
+
         <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
 
             {{-- Dropdown Laptop s/d PC --}}
             <div class="hidden lg:inline lg:w-auto">
-                <button @click="dropDownLaptop = !dropDownLaptop"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    Action Menu
-                    <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 1 4 4 4-4" />
+                <button type="button" @click="openModalCreateTugas = !openModalCreateTugas;"
+                    class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center gap-2 justify-between">
+                    <span>Tambahkan Tugas</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                        fill="#FFFFFF">
+                        <path
+                            d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
                     </svg>
                 </button>
-
-                <!-- Dropdown menu -->
-                <div x-show="dropDownLaptop" @click.away="dropDownLaptop = false" x-cloak
-                    class="z-auto absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                        <li>
-                            <a href='#'
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
-                                Data Contract</a>
-                        </li>
-                        <li>
-                            <form action='#' method="POST" enctype="multipart/form-data"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
-                                id="uploadFile">
-                                @csrf
-                                <label style="cursor:pointer">Import Data
-                                    <input id="fileInput" name="excel_file" type="file" class="hidden"
-                                        onchange="handleFileUpload()" />
-                                </label>
-                            </form>
-                            <script>
-                                function handleFileUpload() {
-                                    const fileInput = document.getElementById('fileInput');
-                                    if (fileInput.files.length > 0) {
-                                        document.getElementById('uploadFile').submit();
-                                    }
-                                }
-                            </script>
-                        </li>
-                        <li>
-                            <form action="'#'" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <button type="submit" @click="side = false"
-                                    class="w-full flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    Data
-                                </button>
-                            </form>
-                        </li>
-                        <li>
-                            <button type="button" @click="deleteAll = ! deleteAll; dropDownLaptop = false"
-                                class="w-full flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete
-                                All Data</button>
-                        </li>
-                    </ul>
-                </div>
             </div>
 
             <div class="w-full md:w-full lg:w-1/2">
@@ -116,164 +70,59 @@
 
         </div>
 
-        {{-- Dropdown Hp s/d md --}}
-        <div class="md:flex md:items-end justify-end ">
-            <div class="w-full flex flex-col items-center p-4 md:w-48 md:mx-2 lg:hidden">
-                <button @click="dropDownHp = !dropDownHp"
-                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    <label class="flex items-center justify-center"> Action
-                        Menu <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 10 6">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 4 4 4-4" />
-                        </svg></label>
-                </button>
-
-                <!-- DropdownHP menu -->
-                <div x-show="dropDownHp" @click.away="dropDownHp = false" x-cloak
-                    class="z-auto absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropDownHandphone">
-                        <li>
-                            <a href='#'
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Add
-                                Data Contract</a>
-                        </li>
-                        <li>
-                            <form action='#' method="POST" enctype="multipart/form-data"
-                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                                style="cursor:pointer" id="uploadFile">
-                                @csrf
-                                <label style="cursor:pointer">Import Data
-                                    <input id="fileInput" name="excel_file" type="file" class="hidden"
-                                        onchange="handleFileUpload()" />
-                                </label>
-                            </form>
-                            <script>
-                                function handleFileUpload() {
-                                    const fileInput = document.getElementById('fileInput');
-                                    if (fileInput.files.length > 0) {
-                                        document.getElementById('uploadFile').submit();
-                                    }
-                                }
-                            </script>
-                        </li>
-                        <li>
-                            <form action="#" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Export
-                                    Data
-                                </button>
-                            </form>
-                        </li>
-                        <li>
-                            <button type="button" @click="deleteAll = ! deleteAll; dropDownHp = false"
-                                class="w-full flex px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete
-                                All Data</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <div class="overflow-auto lg:my-2 ">
-            <table class="w-full md:w-full md:text-sm text-center  text-gray-500 dark:text-gray-400 ">
+            <table class="w-full table-fixed md:w-full md:text-sm text-center  text-gray-500 dark:text-gray-400 ">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr class="">
-                        <th class="px-4 py-3 lg:py-4 ">No</th>
-                        <th class="px-4 py-3 lg:py-4 ">Nama Mahasiswa</th>
-                        <th class="p-px-4 py-3 lg:py-4 ">NIM</th>
-                        <th class="px-4 py-3 lg:py-4 ">Tugas</th>
-                        <th class="px-4 py-3 lg:py-4 ">Status</th>
-                        <th scope="col" class="text-center mx-4 py-3 lg:py-4 ">Action</th>
+                        <th class="w-12 px-4 py-3 lg:p-0 ">No</th>
+                        <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Tugas</th>
+                        <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Project</th>
+                        <th class="w-56 mx-4 py-3 lg:p-4 ">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data_tugas as $tugas)
                         <tr class="xl:text-base">
-                            <td class="px-4 py-3 lg:py-4">{{ $data_tugas->firstItem() + $loop->index }}</td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->mahasiswa->nama_mahasiswa }}</td>
-                            <td class="px-4 py-3 lg:py-4">{{ $tugas->mahasiswa->nim }}</td>
-                            <td class="px-4 py-3 lg:py-4">
-                                <button type="button"
-                                    @click="showProject = true; 
-                                    idMahasiswa={{ $tugas->mahasiswa->id }}; 
-                                    idTugas={{ $tugas->id }};
-                                    namaTugas='{{ $tugas->nama_tugas }}';
-                                    project={{ $tugas->project }};"
-                                    class="flex items-center text-white justify-center bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center  md:me-0 mb-2 dark:focus:ring-green-900  md:items-center md:w-4/5 md:mx-4 space-x-2">
-                                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke="#CCCCCC" stroke-width="0.288"></g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#000000" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </g>
-                                        <span>{{ $tugas->nama_tugas }}</span>
-                                    </svg>
-                                </button>
+                            <td class="px-4 py-3 lg:p-0">{{ $data_tugas->firstItem() + $loop->index }}</td>
+                            <td class="px-4 py-3 lg:p-0">
+                                {{ $tugas->nama_tugas }}
                             </td>
-                            {{-- <td class="px-4 py-3 lg:py-4">
-                                @php
-                                    $filePath = asset($tugas->file_tugas);
-                                    $fileExtension = pathinfo($tugas->file_tugas, PATHINFO_EXTENSION); // Ambil ekstensi file
-                                @endphp
-
-                                @if ($fileExtension === 'pdf')
-                                    <embed src="{{ $filePath }}" type="application/pdf" class="w-40 h-40">
-                                @elseif (in_array($fileExtension, ['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx']))
-                                    <a href="{{ $filePath }}" target="_blank"
-                                        class="flex items-center justify-center space-x-2">
-                                        <img src="{{ asset('storage/icons/file-icon.png') }}" alt="File Document"
-                                            class="w-10 h-10 ">
-                                        <span>Download File</span>
-                                    </a>
-                                @else
-                                    <a href="{{ $filePath }}" target="_blank" class="text-blue-500">Download
-                                        File</a>
-                                @endif
-                            </td> --}}
-
-                            <td class="px-4 py-3 lg:py-4">
-                                {{ $tugas->status }}
+                            <td class="px-4 py-3 lg:py-4 text-center">
+                                <a href="{{ route('admin.project', $tugas->slug) }}"
+                                    class="inline-flex items-center justify-center w-44 py-2 px-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                        width="24px" fill="#FFFFFF">
+                                        <path
+                                            d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
+                                    </svg>
+                                    <span>Lihat Detail Project</span>
+                                </a>
                             </td>
 
-                            <td class="px-4 py-3 lg:py-4 w-auto">
-                                <button type="button" @click="setujui = ! setujui ; idTugas='{{ $tugas->id }}';"
-                                    class="flex items-center text-white justify-center bg-green-400 hover:bg-green-500 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-md lg:rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center  md:me-0 mb-2 dark:focus:ring-green-900  md:items-center md:w-4/5 md:mx-4 space-x-2">
-                                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke="#CCCCCC" stroke-width="0.288"></g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#000000" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </g>
-                                        <span>Setujui</span>
-                                    </svg>
-                                </button>
-                                <button type="button"
-                                    @click="tidakDisetujui = ! tidakDisetujui ; idTugas='{{ $tugas->id }}';"
-                                    class="flex items-center text-white justify-center bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-md text-sm px-5 py-2.5 md:px-3 md:py-2 text-center md:me-4 mb-2 dark:focus:ring-yellow-900 md:w-4/5 md:mx-4 space-x-2">
-                                    <svg fill="#000000" height="20" width="20" viewBox="0 0 200 200"
-                                        data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                                        stroke="#000000">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <title></title>
+                            <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
+                                <div class="grid gap-4">
+                                    <button type="button"
+                                        @click="openModalUpdateTugas = !openModalUpdateTugas; idAdmin={{ $tugas->admin->id }}; dataTugas={{ $tugas }};"
+                                        class="py-3 px-6 bg-amber-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#FFFFFF">
                                             <path
-                                                d="M114,100l49-49a9.9,9.9,0,0,0-14-14L100,86,51,37A9.9,9.9,0,0,0,37,51l49,49L37,149a9.9,9.9,0,0,0,14,14l49-49,49,49a9.9,9.9,0,0,0,14-14Z">
-                                            </path>
-                                        </g>
-                                        <span>Tolak<span>
-                                    </svg>
-                                </button>
+                                                d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
+                                        </svg>
+                                        <span>Ubah</span>
+                                    </button>
+
+                                    <button type="button"
+                                        @click="openModalDeleteTugas = !openModalDeleteTugas; idTugas={{ $tugas->id }};"
+                                        class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                                            width="24px" fill="#FFFFFF">
+                                            <path
+                                                d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                        </svg>
+                                        <span>Hapus</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -282,161 +131,106 @@
         </div>
         {{ $data_tugas->links() }}
 
-        <div x-cloak x-show="showProject" x-transition
-            class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center overflow-auto">
-            <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800">
-                <div class="flex items-center justify-center py-3">
-                    <span class="text-xl font-semibold" x-text="namaTugas"></span>
+        {{-- Modal Tambahkan Tugas --}}
+        <div x-show="openModalCreateTugas" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-[700px]">
+                <h2 class="text-xl font-bold mb-4">Upload Tugas Baru</h2>
+
+                <form action="{{ route('admin.data.tugas.create', $admin) }}" method="POST" class="grid gap-4">
+                    @csrf
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama Tugas</label>
+                        <input type="text" name="nama_tugas"
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="openModalCreateTugas = false"
+                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
+                            Batal
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {{-- Modal Update Tugas --}}
+        <div x-show="openModalUpdateTugas" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
+            <div class="bg-white p-6 rounded-lg w-[700px]">
+                <h2 class="text-xl font-bold mb-4">Update Tugas </h2>
+
+                <form action="{{ route('admin.data.tugas.update') }}" method="POST" class="grid gap-4">
+                    @csrf
+
+                    <input type="hidden" name="tugas_id" :value=dataTugas.id></input>
+                    <input type="hidden" name="admin_id" :value=dataTugas.admin.id></input>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 text-sm font-medium">Nama Tugas</label>
+                        <input type="text" name="nama_tugas" :value=dataTugas.nama_tugas
+                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    </div>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="openModalUpdateTugas = false"
+                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
+                            Batal
+                        </button>
+                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Delete Tugas -->
+        <div x-show="openModalDeleteTugas" x-cloak
+            class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
+            <form action="{{ route('admin.data.tugas.delete') }}" method="post">
+                @csrf
+                <input type="hidden" :value=idTugas name="id"></input>
+                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                    <!-- Modal content -->
+                    <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                        <button type="button" @click="openModalDeleteTugas = false"
+                            class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-toggle="deleteModal">
+                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
+                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menghapus tugas ini??
+                        </p>
+                        <div class="flex justify-center items-center space-x-4">
+                            <button data-modal-toggle="deleteModal" type="button"
+                                @click="openModalDeleteTugas = false"
+                                class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                Tidak
+                            </button>
+                            <button type="submit"
+                                class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                Ya, saya yakin
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="overflow-auto lg:my-2 rounded-lg shadow-lg">
-                    <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400 ">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                            <tr class="">
-                                <th class="px-4 py-3 lg:py-4 ">No</th>
-                                <th class="px-4 py-3 lg:py-4 ">Nama Project</th>
-                                <th class="p-px-4 py-3 lg:py-4 ">File Project</th>
-                                <th class="px-4 py-3 lg:py-4 ">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template
-                                x-for="(projects, index) in project.filter(p => p.mahasiswa_id === idMahasiswa && p.tugas_id === idTugas)"
-                                :key="projects.id">
-                                <tr class="xl:text-base">
-                                    <td class="px-4 py-3 lg:py-4" x-text="index + 1"></td>
-                                    <td class="px-4 py-3 lg:py-4" x-text="projects.nama_project"></td>
-                                    <td class="px-4 py-3 lg:py-4" x-text="projects.file_project"></td>
-                                    <td class="px-4 py-3 lg:py-4" x-text="projects.status"></td>
-                                </tr>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-
-                <button @click="showProject = false" type="button"
-                    class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-toggle="deleteModal">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-            </div>
-        </div>
-
-        <div x-cloak x-show="deleteAll" x-transition
-            class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center">
-            <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                <form action="#" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <button @click="deleteAll = false" type="button"
-                        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="deleteModal">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                    <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Are you sure you want to delete all data?</p>
-                    <div class="flex justify-center items-center space-x-4">
-                        <button @click="deleteAll = false" type="button"
-                            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            No, cancel
-                        </button>
-                        <button type="submit" @click="deleteAll = false"
-                            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            Yes, I'm sure
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div x-cloak x-show="setujui" x-transition
-            class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center">
-            <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                <form x-bind:action="'/admin/ubah_status_tugas_mahasiswa/' + idTugas" method="POST">
-                    @csrf
-                    <button @click="setujui = false" type="button"
-                        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="deleteModal">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                    <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menyetujui tugas ini?</p>
-                    <div class="flex justify-center items-center space-x-4">
-                        <button @click="setujui = false" type="button"
-                            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            Tidak
-                        </button>
-                        <button type="submit" @click="setujui = false"
-                            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            Ya
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div x-cloak x-show="tidakDisetujui" x-transition
-            class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center">
-            <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                <form x-bind:action="'/admin/ubah_status_tugas_mahasiswa/' + idTugas" method="POST">
-                    @csrf
-                    <button @click="tidakDisetujui = false" type="button"
-                        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-toggle="deleteModal">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button>
-                    <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menolak tugas ini?</p>
-                    <div class="flex justify-center items-center space-x-4">
-                        <button @click="tidakDisetujui = false" type="button"
-                            class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                            Tidak
-                        </button>
-                        <button type="submit" @click="tidakDisetujui = false"
-                            class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                            Ya
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+
+
 </x-layout>

@@ -27,7 +27,17 @@ Route::middleware('auth:account')->group(function () {
         Route::prefix('admin')->group(function () {
             Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
             Route::get('/data-mahasiswa', [AdminController::class, 'mahasiswa'])->name('admin.mahasiswa');
-            Route::get('/tugas-mahasiswa', [AdminController::class, 'tugas'])->name('admin.tugas');
+            Route::get('/data-tugas', [AdminController::class, 'tugas'])->name('admin.data.tugas');
+            Route::post('/data-tugas-create/{idAdmin}', [AdminController::class, 'createTugas'])->name('admin.data.tugas.create');
+            Route::post('/data-tugas-update', [AdminController::class, 'updateTugas'])->name('admin.data.tugas.update');
+            Route::post('/data-tugas-delete', [AdminController::class, 'deleteTugas'])->name('admin.data.tugas.delete');
+            Route::get('/tugas-mahasiswa', [AdminController::class, 'tugasMahasiswa'])->name(name: 'admin.tugas.mahasiswa');
+
+            Route::get('/detail-project/{tugas:slug}', [AdminController::class, 'project'])->name('admin.project');
+            Route::post('/tambah-project', [AdminController::class, 'tambahProject'])->name('admin.tambah.project');
+            Route::post('/edit-project', [AdminController::class, 'editProject'])->name('admin.edit.project');
+            Route::post('/delete-project', [AdminController::class, 'deleteProject'])->name('admin.delete.project');
+
             Route::post('/ubah_status_tugas_mahasiswa/{id}', [AdminController::class, 'setujui_tugas'])->name('admin.setujui_tugas');
             Route::get('/cari-data-mahasiswa', [AdminController::class, 'cari_data_mahasiswa'])->name('admin.cari_data_mahasiswa');
         });

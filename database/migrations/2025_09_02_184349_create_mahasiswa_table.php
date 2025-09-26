@@ -17,6 +17,7 @@ return new class extends Migration
                 ->constrained('account', 'id', indexName: 'mahasiswa_account_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_mahasiswa');
+            $table->string('slug');
             $table->string('nim');
             $table->string('semester');
             $table->string('email');
