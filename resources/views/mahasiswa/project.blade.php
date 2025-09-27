@@ -69,12 +69,12 @@
                 <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                         <tr class="">
-                            <th class="w-12 px-4 py-3 lg:p-0 ">No</th>
-                            <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Project</th>
-                            <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama File Project</th>
-                            <th class="w-1/3 px-4 py-3 lg:p-0 ">File Project</th>
-                            <th class="w-1/3 px-4 py-3 lg:p-0 ">Status</th>
-                            <th class="w-56 mx-4 py-3 lg:p-4 ">Action</th>
+                            <th class="px-4 py-3 lg:p-4 ">No</th>
+                            <th class="px-4 py-3 lg:p-4 ">Nama Project</th>
+                            <th class="px-4 py-3 lg:p-4 ">Nama File Project</th>
+                            <th class="px-4 py-3 lg:p-4 ">File Project</th>
+                            <th class="px-4 py-3 lg:p-4 ">Status</th>
+                            <th class="mx-4 py-3 lg:p-4 ">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,7 +88,14 @@
                                     {{ $project->nama_file_project ?? 'Tidak Ada' }}
                                 </td>
                                 <td class="px-4 py-3 lg:p-4">
-                                    {{ $project->file_project ?? 'Tidak Ada' }}
+                                    @if ($project->file_project)
+                                        <a href="{{ asset('storage/' . $project->file_project) }}" target="_blank"
+                                            class="text-blue-600 hover:underline">
+                                            Lihat File
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 italic">Belum ada file</span>
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3 lg:p-4 text-center">
                                     {{ $project->status ?? 'Tidak Ada' }}
@@ -117,16 +124,6 @@
                                             </svg>
                                             <span>Ubah</span>
                                         </button>
-
-                                        <button type="button"
-                                            class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                            </svg>
-                                            <span>Hapus</span>
-                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -137,7 +134,7 @@
             {{ $dataProject->links() }}
 
             <div class="flex items-center justify-end mt-5">
-                <a href="{{ route('admin.data.tugas') }}"
+                <a href="{{ route('mahasiswa.tugas') }}"
                     class="p-4 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 rounded-lg text-white">
                     Kembali
                 </a>
@@ -225,7 +222,7 @@
                             Batal
                         </button>
                         <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Upload
+                            Update
                         </button>
                     </div>
                 </form>

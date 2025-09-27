@@ -45,7 +45,14 @@ class MahasiswaController extends Controller
     {
         $dataTugas = Tugas::with('project')->where('slug', $slug)->firstOrFail();
 
-        $dataProject = $dataTugas->project()->paginate(10);
+        $idAkun = Auth::guard('account')->id();
+        $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
+
+        $dataProject = $dataTugas->project()
+            ->whereHas('mahasiswa', function ($query) use ($mahasiswa) {
+                $query->where('mahasiswa_id', $mahasiswa->id);
+            })
+            ->paginate(10);
 
         return view('mahasiswa.project', compact('dataTugas', 'dataProject'), ['title' => 'Detail Project']);
     }
@@ -86,6 +93,8 @@ class MahasiswaController extends Controller
 
         $mahasiswa->project()->attach($project->id);
 
+        $mahasiswa->tugas()->attach($request->tugas_id);
+
         return redirect()->back();
     }
 
@@ -108,7 +117,7 @@ class MahasiswaController extends Controller
             }
 
             $file = $request->file('file_project');
-            $namaFile = time() . '-' . $request->nama_file_project . '.' . $file->getClientOriginalExtension();
+            $namaFile = $request->nama_file_project . '.' . $file->getClientOriginalExtension();
             $jalur = $file->storeAs('Tugas-Mahasiswa', $namaFile, 'public');
 
             $project->update([
@@ -126,4 +135,6 @@ class MahasiswaController extends Controller
 
         return redirect()->back();
     }
+
+    public function deleteProject(Request $request) {}
 }

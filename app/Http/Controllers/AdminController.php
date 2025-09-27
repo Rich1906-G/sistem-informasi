@@ -81,13 +81,9 @@ class AdminController extends Controller
 
         $admin = Admin::where('account_id', $idAkun)->firstOrFail();
 
-        $data_mahasiswa = Mahasiswa::paginate(10);
+        $dataTugas = Tugas::with('mahasiswa')->paginate(10);
 
-        $data_tugas = Tugas::paginate(10);
-
-        // dd($data_mahasiswa);
-
-        return view('admin.tugas-mahasiswa', compact('data_mahasiswa', 'admin', 'data_tugas'), ['title' => 'Tugas Mahasiswa', 'header' => 'Tugas Mahasiswa']);
+        return view('admin.tugas-mahasiswa', compact('admin', 'dataTugas'), ['title' => 'Tugas Mahasiswa', 'header' => 'Tugas Mahasiswa']);
     }
 
     public function project($slug)
@@ -138,17 +134,48 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function setujui_tugas($id)
+    public function projectMahasiswa($slug)
     {
-        $tugas = Tugas::findOrFail($id);
+        $tugas = Tugas::where('slug', $slug)->with('mahasiswa')->firstOrFail();
 
-        if ($tugas->status === 'Disetujui') {
-            $tugas->update(['status' => 'Tidak Disetujui']);
-        } elseif ($tugas->status === 'Tidak Disetujui') {
-            $tugas->update([
-                'status' => 'Disetujui'
-            ]);
-        }
+        $dataMahasiswa = Mahasiswa::whereHas('tugas', function ($q) use ($tugas) {
+            $q->where('tugas_id', $tugas->id);
+        })->with(
+            [
+                'project' => function ($q) use ($tugas) {
+                    $q->where('tugas_id', $tugas->id);
+                },
+                'tugas' => function ($q) use ($tugas) {
+                    $q->where('tugas_id', $tugas->id);
+                }
+            ]
+        )->paginate(10);
+
+        $mahasiswaId = $dataMahasiswa->pluck('id');
+
+        return view('admin.project-mahasiswa', compact('dataMahasiswa', 'tugas', 'mahasiswaId'), ['tugasId' => $tugas->id, 'title' => 'Project Mahasiswa']);
+    }
+
+    public function setujui_tugas(Request $request)
+    {
+        $tugas = Tugas::findOrFail($request->tugas_id);
+        $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
+
+        $tugas->mahasiswa()->updateExistingPivot($mahasiswa->id, [
+            'status' => 'Disetujui',
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function tolakTugas(Request $request)
+    {
+        $tugas = Tugas::findOrFail($request->tugas_id);
+        $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
+
+        $tugas->mahasiswa()->updateExistingPivot($mahasiswa->id, [
+            'status' => 'Tidak Disetujui',
+        ]);
 
         return redirect()->back();
     }
