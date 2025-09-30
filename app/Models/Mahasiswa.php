@@ -23,7 +23,7 @@ class Mahasiswa extends Model
 
     public function project()
     {
-        return $this->belongsToMany(Project::class, 'mahasiswa_project', 'mahasiswa_id', 'project_id');
+        return $this->belongsToMany(Project::class, 'mahasiswa_project', 'mahasiswa_id', 'project_id')->withPivot(['status'])->withTimestamps();
     }
 
     public static function boot()

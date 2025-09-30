@@ -17,6 +17,8 @@ return new class extends Migration
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('project_id')->constrained('project', 'id', 'mahasiswa_project_project_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('file_project')->nullable();
+            $table->enum('status', ['Disetujui', 'Tidak Disetujui'])->default('Tidak Disetujui');
             $table->timestamps();
         });
     }

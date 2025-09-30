@@ -15,7 +15,7 @@ class AuthController extends Controller
     }
     public function loginProdi()
     {
-        return view('auth.prodi.login');
+        return view('auth.prodi.login');    
     }
     public function loginMahasiswa()
     {

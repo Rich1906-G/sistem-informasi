@@ -93,8 +93,6 @@
                 </tbody>
             </table>
         </div>
-        {{ $dataTugas->links() }}
-
 
         <div x-cloak x-show="showProject" x-transition
             class="bg-black/50 fixed top-0 left-0 h-screen w-full flex justify-center items-center overflow-auto">

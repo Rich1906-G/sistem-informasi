@@ -43,46 +43,56 @@ class MahasiswaController extends Controller
 
     public function project($slug)
     {
-        $dataTugas = Tugas::with('project')->where('slug', $slug)->firstOrFail();
+        $slugTugas = Tugas::where('slug', $slug)->firstOrFail();
 
+        // Ambil mahasiswa yang login (jangan pakai id langsung kalau pakai guard custom)
         $idAkun = Auth::guard('account')->id();
-        $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
+        $mahasiswa = Mahasiswa::where('account_id', $idAkun)->first(); // bisa null kalau belum lengkap
 
-        $dataProject = $dataTugas->project()
-            ->whereHas('mahasiswa', function ($query) use ($mahasiswa) {
-                $query->where('mahasiswa_id', $mahasiswa->id);
-            })
+        $dataProject = Project::where('tugas_id', $slugTugas->id)
+            ->with(['mahasiswa' => function ($q) use ($mahasiswa) {
+                if ($mahasiswa) {
+                    // pastikan nama tabel/kolom sesuai; 'mahasiswa.id' biasanya aman
+                    $q->where('mahasiswa.id', $mahasiswa->id);
+                }
+            }])
             ->paginate(10);
 
-        return view('mahasiswa.project', compact('dataTugas', 'dataProject'), ['title' => 'Detail Project']);
+        // $dataProject = $project->mahasiswa()->paginate(10);
+
+        // dd($dataProject);
+
+        $idAkun = Auth::guard('account')->id();
+        $mahasiswa = Mahasiswa::where('account_id', $idAkun)->first();
+
+        // $dataProject = $dataTugas->project()
+        //     ->whereHas('mahasiswa', function ($q) use ($mahasiswa) {
+        //         $q->where('mahasiswa_id', $mahasiswa->id); // asumsi pakai auth()->id()
+        //     })
+        //     ->paginate(10);
+
+        return view('mahasiswa.project', compact('slugTugas', 'dataProject'), ['title' => 'Detail Project']);
     }
 
     public function uploadProject(Request $request)
     {
         $request->validate([
             'project_id' => ['required', 'exists:project,id'],
-            'tugas_id' => ['required', 'exists:tugas,id'],
-            'nama_file_project' => ['required'],
             'file_project' => ['required', 'mimes:pdf'],
         ]);
 
         $idAkun = Auth::guard('account')->id();
         $mahasiswa = Mahasiswa::where('account_id', $idAkun)->firstOrFail();
 
-        // dd($mahasiswa);
-
         $project = Project::findOrFail($request->project_id);
+        $tugasId = $project->tugas_id; // ambil langsung dari relasi project
 
-        // Jika ada file baru, simpan dan update jalurnya
+        $jalur = null;
         if ($request->hasFile('file_project')) {
             $file = $request->file('file_project');
-            $namaFile = $request->nama_file_project . '.' . $file->getClientOriginalExtension();
-            $jalur = $file->storeAs('Tugas-Mahasiswa', $namaFile, 'public');
-            $project->file_project = $jalur;
+            $jalur = $file->store('Tugas-Mahasiswa', 'public');
 
             $project->update([
-                'nama_file_project' => $namaFile,
-                'file_project' => $jalur,
                 'status' => 'Sudah Submit'
             ]);
         } else {
@@ -91,12 +101,19 @@ class MahasiswaController extends Controller
             ]);
         }
 
-        $mahasiswa->project()->attach($project->id);
+        // Simpan ke pivot mahasiswa_project
+        $mahasiswa->project()->syncWithoutDetaching([
+            $project->id => [
+                'file_project' => $jalur,
+            ]
+        ]);
 
-        $mahasiswa->tugas()->attach($request->tugas_id);
+        // Simpan ke pivot mahasiswa_tugas
+        $mahasiswa->tugas()->syncWithoutDetaching([$tugasId]);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Project berhasil diupload!');
     }
+
 
     public function updateProject(Request $request)
     {
@@ -107,7 +124,6 @@ class MahasiswaController extends Controller
 
         $request->validate([
             'project_id' => ['required', 'exists:project,id'],
-            'nama_file_project' => ['required'],
             'file_project' => ['nullable', 'mimes:pdf'],
         ]);
 
@@ -117,17 +133,16 @@ class MahasiswaController extends Controller
             }
 
             $file = $request->file('file_project');
-            $namaFile = $request->nama_file_project . '.' . $file->getClientOriginalExtension();
-            $jalur = $file->storeAs('Tugas-Mahasiswa', $namaFile, 'public');
+            $jalur = $file->store('Tugas-Mahasiswa', 'public');
 
             $project->update([
-                'nama_file_project' => $namaFile,
                 'file_project' => $jalur,
             ]);
         } else {
             // Kalau tidak upload file baru, tetap update status
             $project->update([
-                'nama_file_project' => $request->nama_file_project,
+                'file_project' => '',
+                'status' => 'Belum Submit'
             ]);
         }
 

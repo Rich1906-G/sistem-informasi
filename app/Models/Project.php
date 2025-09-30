@@ -16,6 +16,6 @@ class Project extends Model
     }
     public function mahasiswa()
     {
-        return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_project', 'project_id', 'mahasiswa_id');
+        return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_project', 'project_id', 'mahasiswa_id')->withPivot(['file_project', 'status'])->withTimestamps();
     }
 }

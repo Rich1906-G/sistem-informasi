@@ -27,7 +27,7 @@
         <div class=" grid gap-4 w-full py-8">
             <div class="flex items-center justify-center">
                 {{-- <label class="font-bold text-2xl font-sans">Detail Project</label> --}}
-                <h2 class="font-bold text-2xl font-sans">Detail Tugas : {{ $dataTugas->nama_tugas }}</h2>
+                <h2 class="font-bold text-2xl font-sans">Detail Tugas : {{ $slugTugas->nama_tugas }}</h2>
             </div>
 
             <div class="flex flex-col items-center py-4 md:flex-row md:space-y-0 lg:justify-end ">
@@ -71,7 +71,6 @@
                         <tr class="">
                             <th class="px-4 py-3 lg:p-4 ">No</th>
                             <th class="px-4 py-3 lg:p-4 ">Nama Project</th>
-                            <th class="px-4 py-3 lg:p-4 ">Nama File Project</th>
                             <th class="px-4 py-3 lg:p-4 ">File Project</th>
                             <th class="px-4 py-3 lg:p-4 ">Status</th>
                             <th class="mx-4 py-3 lg:p-4 ">Action</th>
@@ -80,16 +79,20 @@
                     <tbody>
                         @foreach ($dataProject as $project)
                             <tr class="xl:text-base">
-                                <td class="px-4 py-3 lg:px-8">{{ $dataProject->firstItem() + $loop->index }}</td>
+                                <td class="px-4 py-3 lg:px-8">{{ $dataProject->firstItem() + $loop->index }}
+                                </td>
                                 <td class="px-4 py-3 lg:py-4 text-center">
                                     {{ $project->nama_project }}
+
                                 </td>
+                                {{-- cek apakah mahasiswa login punya pivot untuk project ini --}}
+                                @php
+                                    $attach = $project->mahasiswa->first() ?? null;
+                                @endphp
+
                                 <td class="px-4 py-3 lg:p-4">
-                                    {{ $project->nama_file_project ?? 'Tidak Ada' }}
-                                </td>
-                                <td class="px-4 py-3 lg:p-4">
-                                    @if ($project->file_project)
-                                        <a href="{{ asset('storage/' . $project->file_project) }}" target="_blank"
+                                    @if ($attach && isset($attach->pivot->file_project) && $attach->pivot->file_project)
+                                        <a href="{{ asset('storage/' . $attach->pivot->file_project) }}" target="_blank"
                                             class="text-blue-600 hover:underline">
                                             Lihat File
                                         </a>
@@ -104,7 +107,7 @@
                                 <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
                                     <div class="grid gap-4 w-44">
                                         <button type="button"
-                                            @click="openModalUploadProject = !openModalUploadProject; dataProject={{ $project }}; idTugas={{ $dataTugas->id }};"
+                                            @click="openModalUploadProject = !openModalUploadProject; dataProject={{ $project }}; idTugas={{ $project->id }};"
                                             class="flex items-center gap-2 justify-center px-5 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                                 viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
@@ -115,7 +118,7 @@
                                         </button>
 
                                         <button type="button"
-                                            @click="openModalUpdateProject = !openModalUpdateProject; dataProject={{ $project }}; idTugas={{ $dataTugas->id }}"
+                                            @click="openModalUpdateProject = !openModalUpdateProject; dataProject={{ $project }}; idTugas={{ $project->id }}"
                                             class="py-3 px-6 bg-amber-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                                 viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
@@ -149,18 +152,12 @@
                 <form action="{{ route('mahasiswa.upload.project') }}" method="POST" class="grid gap-4"
                     enctype="multipart/form-data">
                     @csrf
+                    <input type="hidden" name="project_id" :value=dataProject.id>
+                    <input type="hidden" name="tugas_id" :value=idTugas>
                     <div class="mb-4">
                         <label class="block mb-1 text-sm font-medium">Nama Project</label>
                         <input type="text" name="nama_project" :value=dataProject.nama_project readonly
                             class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="project_id" :value=dataProject.id>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama File Project</label>
-                        <input type="text" name="nama_file_project"
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="tugas_id" :value=idTugas>
                     </div>
 
                     <div class="mb-4">
@@ -201,19 +198,13 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama File Project</label>
-                        <input type="text" name="nama_file_project" :value=dataProject.nama_file_project
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="tugas_id" :value=idTugas>
-                    </div>
-
-                    <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
                             Project</label>
                         <input
                             class="block w-full mb-5 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             type="file" accept="application/pdf" name="file_project"
                             :value=dataProject.file_project>
+                        <input type="hidden" name="tugas_id" :value=idTugas>
                     </div>
 
                     <div class="flex justify-end gap-2">

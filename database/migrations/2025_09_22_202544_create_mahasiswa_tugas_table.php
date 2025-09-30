@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('mahasiswa_tugas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mahasiswa_id')->constrained('mahasiswa', 'id', 'mahasiswa_tugas_mahasiswa_id');
-            $table->foreignId('tugas_id')->constrained('tugas', 'id', 'mahasiswa_tugas_tugas_id');
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswa', 'id', 'mahasiswa_tugas_mahasiswa_id')
+                ->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('tugas_id')->constrained('tugas', 'id', 'mahasiswa_tugas_tugas_id')
+                ->cascadeOnDelete()->cascadeOnUpdate();
             $table->enum('status', ['Disetujui', 'Tidak Disetujui'])->default('Tidak Disetujui');
-            $table->timestamps();   
+            $table->timestamps();
         });
     }
 

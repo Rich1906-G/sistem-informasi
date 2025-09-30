@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('tugas_id')->constrained('tugas', 'id', 'project_tugas_id')
                 ->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama_project');
-            $table->string('nama_file_project')->nullable();
-            $table->string('file_project')->nullable();
+            // $table->string('file_project')->nullable();
             $table->enum('status', ['Belum Submit', 'Sudah Submit'])->defatul('Belum Submit');
             $table->timestamps();
         });

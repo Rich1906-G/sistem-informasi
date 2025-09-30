@@ -98,10 +98,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $no = 1;
+                        @endphp
                         @foreach ($dataMahasiswa as $mahasiswa)
                             @foreach ($mahasiswa->project as $project)
                                 <tr class="xl:text-base">
-                                    <td class="px-4 py-3 lg:px-8">{{ $dataMahasiswa->firstItem() + $loop->index }}</td>
+                                    <td class="px-4 py-3 lg:px-8">{{ $no++ }}</td>
                                     <td class="px-4 py-3 lg:py-4 text-center">
                                         {{ $project->nama_project }}
                                     </td>
