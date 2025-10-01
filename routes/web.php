@@ -38,7 +38,7 @@ Route::middleware('auth:account')->group(function () {
             Route::post('/edit-project', [AdminController::class, 'editProject'])->name('admin.edit.project');
             Route::post('/delete-project', [AdminController::class, 'deleteProject'])->name('admin.delete.project');
 
-            Route::get('/detail-project-mahasiswa/{tugas:slug}', [AdminController::class, 'projectMahasiswa'])->name('admin.project.mahasiswa');
+            Route::get('/detail-project-mahasiswa/{mahasiswa:slug}/{tugas:slug}', [AdminController::class, 'projectMahasiswa'])->name('admin.project.mahasiswa');
             Route::post('/setujui-tugas-mahasiswa', [AdminController::class, 'setujui_tugas'])->name('admin.setujui.tugas');
             Route::post('/tolak-tugas-mahasiswa', [AdminController::class, 'tolakTugas'])->name('admin.tolak.tugas');
             Route::get('/cari-data-mahasiswa', [AdminController::class, 'cari_data_mahasiswa'])->name('admin.cari_data_mahasiswa');

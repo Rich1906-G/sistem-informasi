@@ -58,18 +58,8 @@ class MahasiswaController extends Controller
             }])
             ->paginate(10);
 
-        // $dataProject = $project->mahasiswa()->paginate(10);
-
-        // dd($dataProject);
-
         $idAkun = Auth::guard('account')->id();
         $mahasiswa = Mahasiswa::where('account_id', $idAkun)->first();
-
-        // $dataProject = $dataTugas->project()
-        //     ->whereHas('mahasiswa', function ($q) use ($mahasiswa) {
-        //         $q->where('mahasiswa_id', $mahasiswa->id); // asumsi pakai auth()->id()
-        //     })
-        //     ->paginate(10);
 
         return view('mahasiswa.project', compact('slugTugas', 'dataProject'), ['title' => 'Detail Project']);
     }
@@ -136,17 +126,21 @@ class MahasiswaController extends Controller
             $jalur = $file->store('Tugas-Mahasiswa', 'public');
 
             $project->update([
-                'file_project' => $jalur,
+                'status' => 'Belum Submit'
             ]);
         } else {
             // Kalau tidak upload file baru, tetap update status
             $project->update([
-                'file_project' => '',
                 'status' => 'Belum Submit'
             ]);
         }
 
-        $mahasiswa->project()->attach($project->id);
+        // Simpan ke pivot mahasiswa_project
+        $mahasiswa->project()->syncWithoutDetaching([
+            $project->id => [
+                'file_project' => $jalur,
+            ]
+        ]);
 
         return redirect()->back();
     }

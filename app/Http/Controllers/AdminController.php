@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -61,6 +62,7 @@ class AdminController extends Controller
         $tugas->update([
             'admin_id' => $request->admin_id,
             'nama_tugas' => $request->nama_tugas,
+            'slug' =>  Str::slug($request->nama_tugas, '-'),
         ]);
 
         return redirect()->back();
@@ -134,34 +136,29 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
-    public function projectMahasiswa($slug)
+    public function projectMahasiswa($mahasiswaSlug, $slug)
     {
-        $tugas = Tugas::where('slug', $slug)->with('mahasiswa')->firstOrFail();
+        $tugas = Tugas::where('slug', $slug)->firstOrFail();
+        $mahasiswa = Mahasiswa::where('slug', $mahasiswaSlug)->firstOrFail();
 
-        $dataMahasiswa = Mahasiswa::whereHas('tugas', function ($q) use ($tugas) {
-            $q->where('tugas_id', $tugas->id);
-        })->with(
-            [
-                'project' => function ($q) use ($tugas) {
-                    $q->where('tugas_id', $tugas->id);
-                },
-                'tugas' => function ($q) use ($tugas) {
-                    $q->where('tugas_id', $tugas->id);
+        $dataProject = Project::where('tugas_id', $tugas->id)
+            ->with(['mahasiswa' => function ($q) use ($mahasiswa) {
+                if ($mahasiswa) {
+                    // pastikan nama tabel/kolom sesuai; 'mahasiswa.id' biasanya aman
+                    $q->where('mahasiswa.id', $mahasiswa->id);
                 }
-            ]
-        )->paginate(10);
+            }])
+            ->paginate(10);
 
-        $mahasiswaId = $dataMahasiswa->pluck('id');
-
-        return view('admin.project-mahasiswa', compact('dataMahasiswa', 'tugas', 'mahasiswaId'), ['tugasId' => $tugas->id, 'title' => 'Project Mahasiswa']);
+        return view('admin.project-mahasiswa', compact('dataProject', 'tugas', 'mahasiswa'), ['tugasId' => $tugas->id, 'title' => 'Project Mahasiswa']);
     }
 
     public function setujui_tugas(Request $request)
     {
-        $tugas = Tugas::findOrFail($request->tugas_id);
+        $project = Project::findOrFail($request->project_id);
         $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
 
-        $tugas->mahasiswa()->updateExistingPivot($mahasiswa->id, [
+        $mahasiswa->project()->updateExistingPivot($project->id, [
             'status' => 'Disetujui',
         ]);
 
@@ -170,10 +167,10 @@ class AdminController extends Controller
 
     public function tolakTugas(Request $request)
     {
-        $tugas = Tugas::findOrFail($request->tugas_id);
+        $project = Project::findOrFail($request->project_id);
         $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
 
-        $tugas->mahasiswa()->updateExistingPivot($mahasiswa->id, [
+        $mahasiswa->project()->updateExistingPivot($project->id, [
             'status' => 'Tidak Disetujui',
         ]);
 

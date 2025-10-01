@@ -19,7 +19,7 @@
     <div x-data="{
         openModalSetujuiProject: false,
         openModalMenolakProject: false,
-        idTugas: '',
+        idProject: '',
         idMahasiswa: '',
     }" class="flex max-w-7xl mx-auto p-4  items-center justify-center">
         <div class=" grid gap-4 w-full py-8">
@@ -29,9 +29,8 @@
             </div>
 
             <div class="flex flex-col items-center py-4 md:flex-row md:space-y-0 lg:justify-between gap-4">
-                <div class="flex gap-4 ">
-                    <button type="button"
-                        @click="openModalSetujuiProject = !openModalSetujuiProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
+                {{-- <div class="flex gap-4 ">
+                    <button type="button" @click="openModalSetujuiProject = !openModalSetujuiProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
                         class="flex items-center gap-2 justify-center px-5 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                             fill="#FFFFFF">
@@ -41,8 +40,7 @@
                         <span class="inline-flex">Setujui</span>
                     </button>
 
-                    <button type="button"
-                        @click="openModalMenolakProject = !openModalMenolakProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
+                    <button type="button" @click="openModalMenolakProject = !openModalMenolakProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
                         class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
                             fill="#FFFFFF">
@@ -51,7 +49,7 @@
                         </svg>
                         <span>Tolak</span>
                     </button>
-                </div>
+                </div> --}}
                 <div class="w-full md:w-full lg:w-1/2 ">
                     <form action="#" method="GET">
                         <div
@@ -92,45 +90,69 @@
                         <tr class="">
                             <th class="px-4 py-3 lg:p-4 ">No</th>
                             <th class="px-4 py-3 lg:p-4 ">Nama Project</th>
-                            <th class="px-4 py-3 lg:p-4 ">Nama File Project</th>
                             <th class="px-4 py-3 lg:p-4 ">File Project</th>
                             <th class="px-4 py-3 lg:p-4 ">Status</th>
+                            <th class="px-4 py-3 lg:p-4 ">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($dataMahasiswa as $mahasiswa)
-                            @foreach ($mahasiswa->project as $project)
-                                <tr class="xl:text-base">
-                                    <td class="px-4 py-3 lg:px-8">{{ $no++ }}</td>
-                                    <td class="px-4 py-3 lg:py-4 text-center">
-                                        {{ $project->nama_project }}
-                                    </td>
-                                    <td class="px-4 py-3 lg:p-4">
-                                        {{ $project->nama_file_project ?? 'Tidak Ada' }}
-                                    </td>
-                                    <td class="px-4 py-3 lg:p-4">
-                                        @if ($project->file_project)
-                                            <a href="{{ asset('storage/' . $project->file_project) }}" target="_blank"
-                                                class="text-blue-600 hover:underline">
-                                                Lihat File
-                                            </a>
-                                        @else
-                                            <span class="text-gray-400 italic">Belum ada file</span>
-                                        @endif
-                                    </td>
-                                    <td class="px-4 py-3 lg:p-4 text-center">
-                                        {{ optional($mahasiswa->tugas->first())->pivot->status ?? 'Belum Ada' }}
-                                    </td>
-                                </tr>
-                            @endforeach
+                        @foreach ($dataProject as $project)
+                            <tr class="xl:text-base">
+                                <td class="px-4 py-3 lg:px-8">{{ $no++ }}</td>
+                                <td class="px-4 py-3 lg:py-4 text-center">
+                                    {{ $project->nama_project }}
+                                </td>
+                                @php
+                                    $attach = $project->mahasiswa->first() ?? null;
+                                @endphp
+
+                                <td class="px-4 py-3 lg:p-4">
+                                    @if ($attach && isset($attach->pivot->file_project) && $attach->pivot->file_project)
+                                        <a href="{{ asset('storage/' . $attach->pivot->file_project) }}" target="_blank"
+                                            class="text-blue-600 hover:underline">
+                                            Lihat File
+                                        </a>
+                                    @else
+                                        <span class="text-gray-400 italic">Belum ada file</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 lg:p-4 text-center">
+                                    {{ $attach->pivot->status ?? 'Halo' }}
+                                </td>
+                                <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
+                                    <div class="grid gap-4 w-44">
+                                        <button type="button"
+                                            @click="openModalSetujuiProject = !openModalSetujuiProject; idMahasiswa={{ $mahasiswa->id }}; idProject={{ $project->id }};"
+                                            class="flex items-center gap-2 justify-center px-5 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                                                <path
+                                                    d="m381-240 424-424-57-56-368 367-169-170-57 57 227 226Zm0 113L42-466l169-170 170 170 366-367 172 168-538 538Z" />
+                                            </svg>
+                                            <span class="inline-flex">Setujui</span>
+                                        </button>
+
+                                        <button type="button"
+                                            @click="openModalMenolakProject = !openModalMenolakProject; idMahasiswa={{ $mahasiswa->id }}; idProject={{ $project->id }};"
+                                            class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
+                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
+                                                <path
+                                                    d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
+                                            </svg>
+                                            <span>Tolak</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
-            {{ $dataMahasiswa->links() }}
+            {{ $dataProject->links() }}
 
             <div class="flex items-center justify-end mt-5">
                 <a href="{{ route('admin.tugas.mahasiswa') }}"
@@ -145,7 +167,7 @@
             class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
             <form action="{{ route('admin.setujui.tugas') }}" method="post">
                 @csrf
-                <input type="text" class="hidden" name="tugas_id" :value=idTugas></input>
+                <input type="text" class="hidden" name="project_id" :value=idProject></input>
                 <input type="text" class="hidden" name="mahasiswa_id" :value=idMahasiswa></input>
                 <div class="relative p-4 w-full max-w-md h-full md:h-auto">
                     <!-- Modal content -->
@@ -191,7 +213,7 @@
             class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
             <form action="{{ route('admin.tolak.tugas') }}" method="post">
                 @csrf
-                <input type="text" class="hidden" name="tugas_id" :value=idTugas></input>
+                <input type="text" class="hidden" name="project_id" :value=idProject></input>
                 <input type="text" class="hidden" name="mahasiswa_id" :value=idMahasiswa></input>
                 <div class="relative p-4 w-full max-w-md h-full md:h-auto">
                     <!-- Modal content -->
