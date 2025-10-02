@@ -24,32 +24,15 @@
     }" class="flex max-w-7xl mx-auto p-4  items-center justify-center">
         <div class=" grid gap-4 w-full py-8">
             <div class="flex items-center justify-center">
-                {{-- <label class="font-bold text-2xl font-sans">Detail Project</label> --}}
                 <h2 class="font-bold text-2xl font-sans">Detail Tugas : {{ $tugas->nama_tugas }}</h2>
             </div>
 
             <div class="flex flex-col items-center py-4 md:flex-row md:space-y-0 lg:justify-between gap-4">
-                {{-- <div class="flex gap-4 ">
-                    <button type="button" @click="openModalSetujuiProject = !openModalSetujuiProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
-                        class="flex items-center gap-2 justify-center px-5 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                            fill="#FFFFFF">
-                            <path
-                                d="m381-240 424-424-57-56-368 367-169-170-57 57 227 226Zm0 113L42-466l169-170 170 170 366-367 172 168-538 538Z" />
-                        </svg>
-                        <span class="inline-flex">Setujui</span>
-                    </button>
+                <div class="w-1/2">
+                    <label class="text-lg font-semibold text-gray-800">Nama Mahasiswa :
+                        {{ $mahasiswa->nama_mahasiswa }}</label>
+                </div>
 
-                    <button type="button" @click="openModalMenolakProject = !openModalMenolakProject; idTugas={{ $tugas->id }}; idMahasiswa={{ $mahasiswaId }};"
-                        class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                            fill="#FFFFFF">
-                            <path
-                                d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z" />
-                        </svg>
-                        <span>Tolak</span>
-                    </button>
-                </div> --}}
                 <div class="w-full md:w-full lg:w-1/2 ">
                     <form action="#" method="GET">
                         <div
@@ -183,13 +166,13 @@
                             <span class="sr-only">Close modal</span>
                         </button>
 
-                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd">
-                            </path>
+                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto"
+                            xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                            width="24px" fill="#000000">
+                            <path
+                                d="m424-318 282-282-56-56-226 226-114-114-56 56 170 170ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm280-590q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
                         </svg>
+
                         <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menyetujui project
                             ini??
                         </p>
@@ -199,7 +182,7 @@
                                 Tidak
                             </button>
                             <button type="submit"
-                                class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                class="py-2 px-3 text-sm font-medium text-center text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-red-900">
                                 Ya, saya yakin
                             </button>
                         </div>
@@ -228,13 +211,11 @@
                             </svg>
                             <span class="sr-only">Close modal</span>
                         </button>
-
-                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd">
-                            </path>
+                        
+                        <svg  class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
+                            width="24px" fill="#000000">
+                            <path
+                                d="m388-212-56-56 92-92-92-92 56-56 92 92 92-92 56 56-92 92 92 92-56 56-92-92-92 92ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z" />
                         </svg>
                         <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menyetujui project
                             ini??

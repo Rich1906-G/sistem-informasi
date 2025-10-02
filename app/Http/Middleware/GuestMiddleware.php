@@ -17,10 +17,8 @@ class GuestMiddleware
             switch ($role) {
                 case 'Admin':
                     return redirect()->route('admin.dashboard');
-                case 'Prodi':
-                    return redirect()->route('prodi.dashboard');
                 case 'Mahasiswa':
-                    abort(403, 'Udah Login Kau Lek');
+                    return redirect()->route('mahasiswa.dashboard');
             }
         }
 
