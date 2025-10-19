@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokter;
+use App\Models\Project;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,5 +86,44 @@ class DokterController extends Controller
         $data_project = $data_tugas->project()->paginate(10);
 
         return view('dokter.project', compact('data_tugas', 'data_project'), ['title' => 'Detail Project']);
+    }
+
+    public function tambahProject(Request $request)
+    {
+        $request->validate([
+            'tugas_id' => ['required', 'exists:tugas,id'],
+            'nama_project' => ['required'],
+        ]);
+
+        Project::create([
+            'tugas_id' => $request->tugas_id,
+            'nama_project' => $request->nama_project,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function editProject(Request $request)
+    {
+        $project = Project::findOrFail($request->id);
+
+        $request->validate([
+            'nama_project' => ['required'],
+        ]);
+
+        $project->update([
+            'nama_project' => $request->nama_project,
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function deleteProject(Request $request)
+    {
+        $project = Project::findOrFail($request->id);
+
+        $project->delete();
+
+        return redirect()->back();
     }
 }

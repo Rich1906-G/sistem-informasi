@@ -131,7 +131,7 @@
             {{ $data_project->links() }}
 
             <div class="flex items-center justify-end mt-5">
-                <a href="{{ route('admin.data.tugas') }}"
+                <a href="{{ route('dokter.data.tugas') }}"
                     class="p-4 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 rounded-lg text-white">
                     Kembali
                 </a>
@@ -143,7 +143,7 @@
             <div class="bg-white p-6 rounded-lg w-[700px]">
                 <h2 class="text-xl font-bold mb-4">Upload Project Baru</h2>
 
-                <form action="{{ route('admin.tambah.project') }}" method="POST" class="grid gap-4">
+                <form action="{{ route('dokter.tambah.project') }}" method="POST" class="grid gap-4">
                     @csrf
                     <div class="mb-4">
                         <label class="block mb-1 text-sm font-medium">Nama Project</label>
@@ -171,7 +171,7 @@
             <div class="bg-white p-6 rounded-lg w-[700px]">
                 <h2 class="text-xl font-bold mb-4">Update Tugas </h2>
 
-                <form action="{{ route('admin.edit.project') }}" method="POST" class="grid gap-4">
+                <form action="{{ route('dokter.edit.project') }}" method="POST" class="grid gap-4">
                     @csrf
                     <div class="mb-4">
                         <label class="block mb-1 text-sm font-medium">Nama Project</label>
@@ -196,7 +196,7 @@
         <!-- Modal Delete Tugas -->
         <div x-show="openModalDeleteProject" x-cloak
             class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
-            <form action="{{ route('admin.delete.project') }}" method="post">
+            <form action="{{ route('dokter.delete.project') }}" method="post">
                 @csrf
                 <div class="relative p-4 w-full max-w-md h-full md:h-auto">
                     <!-- Modal content -->

@@ -61,6 +61,9 @@ Route::middleware('auth:account')->group(function () {
             Route::get('/tugas-mahasiswa', [DokterController::class, 'tugasMahasiswa'])->name(name: 'dokter.tugas.mahasiswa');
 
             Route::get('/detail-project/{tugas:slug}', [DokterController::class, 'project'])->name('dokter.project');
+            Route::post('/tambah-project', [DokterController::class, 'tambahProject'])->name('dokter.tambah.project');
+            Route::post('/edit-project', [DokterController::class, 'editProject'])->name('dokter.edit.project');
+            Route::post('/delete-project', [DokterController::class, 'deleteProject'])->name('dokter.delete.project');
         });
     });
 
