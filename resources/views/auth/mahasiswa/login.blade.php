@@ -1,145 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Login</title>
-    @vite('resources/css/app.css')
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login — Logbook Mahasiswa</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body>
-    <div class="w-full">
-        <div class="bg-gray-700 p-4">
-            <label class="text-gray-300 font-normal text-xl">SIAM</label>
-        </div>
+<body class="min-h-screen antialiased">
+    <div class="relative min-h-screen">
+        {{-- BG: full-bleed, fokus bisa diatur. Kalau masih terasa zoom, turunin ke center_25% --}}
+        <div class="absolute inset-0 -z-10 bg-cover bg-center md:bg-[position:center_35%]"
+            style="background-image:url('{{ asset('images/rsgm_new.jpg') }}')"></div>
+        {{-- Overlay untuk kontras --}}
+        <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/55 via-black/35 to-black/55"></div>
 
-        <div class="grid grid-cols-[1fr_10fr]">
-            {{-- 10 Berita Terbaru --}}
-            <div class="w-96 bg-slate-200 rounded-md grid items-center justify-start my-5 mx-5 py-4 px-8">
-                <div class="flex flex-col gap-4">
-                    <label class="text-gray-700 text-md font-light pl-2">10 Berita Terbaru</label>
-                    <div class="grid gap-4 ">
-                        <a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a>
-                        <a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a><a href="#"
-                            class="list-disc list-inside text-md space-y-1 text-blue-600 w-auto hover:bg-gray-300 hover:rounded-md p-2">
-                            <span>
-                                Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1 Contoh Berita 1
-                            </span>
-                        </a>
+        {{-- Container tengah --}}
+        <div class="min-h-screen flex items-center justify-center px-4">
+            <div class="w-full max-w-md">
+                {{-- Header kecil --}}
+                <div class="flex items-center gap-3 mb-5 text-white drop-shadow">
+                    @if (file_exists(public_path('images/logo_rsgm.png')))
+                        <img src="{{ asset('images/logo_rsgm.png') }}" alt="Logo" class="h-28 w-28">
+                    @endif
+                    <div>
+                        <p class="text-md uppercase tracking-wider opacity-80">Sistem Logbook</p>
+                        <h1 class="text-4xl font-bold leading-tight">Mahasiswa</h1>
                     </div>
                 </div>
-            </div>
 
-            <div class="flex flex-col gap-4 my-5 pt-5 w-auto px-5">
-                <label class="text-3xl font-bold">SISTEM INFORMASI AKADEMIK MAHASISWA</label>
+                {{-- Kartu login --}}
+                <div
+                    class="rounded-2xl bg-white/90 backdrop-blur-sm border border-white/40 shadow-xl ring-1 ring-black/5 p-5">
+                    <h2 class="text-xl font-semibold">Masuk Akun</h2>
+                    <p class="text-sm text-gray-600">Gunakan kredensial yang diberikan kampus.</p>
+                    <hr class="my-3" />
 
-                <div class="grid bg-gray-100 p-4 rounded-md">
-                    <label class="font-light text-2xl">LOGIN MAHASISWA</label>
-                    <hr class="my-2">
-
-                    <form class="grid my-4 max-w-xl" action="{{ route('login.mahasiswa.submit') }}" method="post">
+                    <form class="grid gap-4" action="{{ route('login.mahasiswa.submit') }}" method="post" novalidate>
                         @csrf
-                        <div class="mb-5">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                            <input type="text" name="username"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Username" required />
-                        </div>
-                        <div class="mb-5">
-                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input type="password" name="password"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required placeholder="********" />
-                        </div>
+
                         <div>
-                            <button type="submit"
-                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                            <label class="block mb-2 text-sm font-medium text-gray-900" for="username">Username</label>
+                            <input id="username" name="username" type="text" inputmode="text"
+                                autocomplete="username" required
+                                class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 text-sm p-2.5
+                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Username" value="{{ old('username') }}" />
+                            @error('username')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label for="password" class="block text-sm font-medium text-gray-900">Password</label>
+                            </div>
+
+                            <div class="relative">
+                                <input id="password" name="password" type="password" autocomplete="current-password"
+                                    required
+                                    class="w-full pr-10 rounded-lg border border-gray-300 bg-white text-gray-900 text-sm p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="********" />
+
+                                <!-- Tombol mata -->
+                                <button type="button"
+                                    class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 cursor-pointer"
+                                    aria-label="Tampilkan/sembunyikan password" aria-pressed="false"
+                                    data-toggle-password data-target="password" title="Lihat/Sembunyikan">
+                                    <!-- eye (show) -->
+                                    <svg data-eye class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                                        <circle cx="12" cy="12" r="3" />
+                                    </svg>
+                                    <!-- eye-off (hide) -->
+                                    <svg data-eye-off class="h-5 w-5 hidden" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.77 21.77 0 0 1 5.06-5.94" />
+                                        <path d="M1 1l22 22" />
+                                        <path d="M9.88 9.88A3 3 0 0 0 12 15a3 3 0 0 0 2.12-.88" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            @error('password')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+
+                        <div class="flex items-center justify-between">
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-700 select-none">
+                                <input type="checkbox" name="remember"
+                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                Ingat saya
+                            </label>
+                        </div>
+
+                        <button type="submit"
+                            class="mt-1 inline-flex items-center justify-center gap-2 w-full px-5 py-2.5 rounded-lg text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                            Masuk
+                        </button>
                     </form>
-
                 </div>
 
-                <div class="">
-                    <label class="">Catatan: </label>
-                    <ul class="list-disc list-inside space-y-2 mt-4">
-                        <li>Setiap mahasiswa/i bisa login ke dalam sistem dengan menggunakan "Nomor Induk Mahasiswa" dan
-                            "Kata Kunci" masing - masing.
-                        </li>
-                        <li>Untuk mahasiswa/i yang belum pernah login sama sekali, bisa login langsung dengan
-                            menggunakan kata kunci yang sama dengan nomor induk mahasiswa.
-                        </li>
-                        <li>Setiap mahasiswa/i yang telah berhasil login ke dalam sistem, dianjurkan untuk memperbaharui
-                            kata kunci masing - masing untuk menjaga kerahasiaan data setiap mahasiswa/i.
-                        </li>
-                        <li>Apabila ada masalah, silakan hubungi Biro Administrasi Umum Universitas Prima Indonesia atau
-                            email langsung ke <a href="mailto:contact@unprimdn.ac.id"
-                                class="text-blue-600 underline">contact@unprimdn.ac.id</a> dengan menyertakan identitas
-                            NIM dan nama Mahasiswa/i yang bersangkutan, serta gunakanlah bahasa Indonesia yang baik,
-                            benar, dan sopan.
-                        </li>
-                    </ul>
-                </div>
+                {{-- Footer kecil --}}
+                <p class="mt-3 text-xs text-center text-white/70">© {{ date('Y') }} — Sistem Logbook Mahasiswa.</p>
             </div>
         </div>
-
-
     </div>
 </body>
 
