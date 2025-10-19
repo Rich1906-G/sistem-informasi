@@ -1,236 +1,187 @@
 <x-layout>
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <x-slot:header>{{ $header }}</x-slot:header>
 
-    <x-slot:title>
-        {{ $title }}
-    </x-slot:title>
+    <div x-data="{
+        openModalCreateTugas: false,
+        openModalUpdateTugas: false,
+        openModalDeleteTugas: false,
+        idTugas: null,
+        dataTugas: {},
+    }" class="mx-auto w-full max-w-screen-7xl px-4 sm:px-6 md:px-2 py-6">
+        {{-- Toolbar --}}
+        <div
+            class="bg-white dark:bg-gray-800/90 shadow-sm ring-1 ring-slate-200/70 dark:ring-slate-700 rounded-xl p-4 mb-6">
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Data Tugas</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Kelola daftar tugas dan project.</p>
+                </div>
 
-    <x-slot:header>
-        {{ $header }}
-    </x-slot:header>
+                <div class="flex gap-2">
+                    <button type="button" @click="openModalCreateTugas = true"
+                        class="inline-flex items-center gap-2 rounded-lg bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm font-medium">
+                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6Z" />
+                        </svg>
+                        Tambahkan Tugas
+                    </button>
 
-    <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg relative md:mx-4 lg:mx-4 xl:my-8 xl:mx-4"
-        x-data="{
-            openModalCreateTugas: false,
-            openModalUpdateTugas: false,
-            openModalDeleteTugas: false,
-            namaTugas: '',
-            idTugas: [],
-            idAdmin: [],
-            dataTugas: [],
-        }">
-
-
-        <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
-
-            {{-- Dropdown Laptop s/d PC --}}
-            <div class="hidden lg:inline lg:w-auto">
-                <button type="button" @click="openModalCreateTugas = !openModalCreateTugas;"
-                    class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center gap-2 justify-between">
-                    <span>Tambahkan Tugas</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#FFFFFF">
-                        <path
-                            d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                    </svg>
-                </button>
-            </div>
-
-            <div class="w-full md:w-full lg:w-1/2">
-                <form action="#" method="GET">
-                    <div
-                        class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0 lg:mb-0    lg:mx-0 lg:max-w-screen-lg">
-                        <div class="relative w-full">
-                            <label for="search"
-                                class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ">Search</label>
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                    <form action="#" method="GET" class="hidden sm:block">
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round"
                                         d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
                                 </svg>
-                            </div>
+                            </span>
+                            <input
+                                class="w-72 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700/70
+                     pl-10 pr-3 py-2 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400
+                     focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Cari Data" name="search" autocomplete="off">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                            <input autocomplete="off" type="text"
-                                class="block p-3 pl-10 w-full text-sm md:block md:w-full text-gray-900 
-                                          bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none 
-                                          sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
-                                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Cara Data" type="search" id="search" name="search">
-                        </div>
-                        <div>
-                            <button type="submit"
-                                class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-blue-700 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search
-                            </button>
-                        </div>
-                    </div>
-                </form>
+        {{-- Table --}}
+        <div
+            class="rounded-xl overflow-hidden bg-white dark:bg-slate-800 shadow ring-1 ring-slate-200/70 dark:ring-slate-700">
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-center text-slate-600 dark:text-slate-200">
+                    <thead class="bg-slate-50 dark:bg-slate-700/60 sticky top-0 z-10">
+                        <tr>
+                            <th class="w-14 px-4 py-3 font-semibold">No</th>
+                            <th class="px-4 py-3 font-semibold text-left">Nama Tugas</th>
+                            <th class="px-4 py-3 font-semibold">Nama Project</th>
+                            <th class="w-60 px-4 py-3 font-semibold">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                        @foreach ($data_tugas as $tugas)
+                            <tr
+                                class="odd:bg-slate-50/40 dark:odd:bg-slate-900/20 hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors">
+                                <td class="px-4 py-3">{{ $data_tugas->firstItem() + $loop->index }}</td>
+                                <td class="px-4 py-3 text-left">
+                                    <span
+                                        class="font-medium text-slate-800 dark:text-slate-100">{{ $tugas->nama_tugas }}</span>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <a href="{{ route('admin.project', $tugas->slug) }}"
+                                        class="inline-flex items-center gap-2 rounded-md bg-amber-500 hover:bg-amber-600 text-white px-3 py-2">
+                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M11 7h2v5h4v2h-6V7Z" />
+                                            <path
+                                                d="M12 22q-2.9 0-5.45-1.1-2.55-1.1-4.45-3-1.9-1.9-3-4.45Q-2 10.9-2 8q0-2.9 1.1-5.45 1.1-2.55 3-4.45 1.9-1.9 4.45-3Q9.1-10 12-10q2.9 0 5.45 1.1 2.55 1.1 4.45 3 1.9 1.9 3 4.45Q26 5.1 26 8q0 2.9-1.1 5.45-1.1 2.55-3 4.45-1.9 1.9-4.45 3Q14.9 22 12 22Z" />
+                                        </svg>
+                                        Lihat Detail Project
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button type="button"
+                                            @click="openModalUpdateTugas = true; dataTugas = @js($tugas);"
+                                            class="inline-flex items-center gap-2 rounded-md bg-amber-500 hover:bg-amber-600 text-white px-3 py-2">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25ZM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0L14.13 4.7l3.75 3.75 2.83-2.41Z" />
+                                            </svg>
+                                            Ubah
+                                        </button>
+
+                                        <button type="button"
+                                            @click="openModalDeleteTugas = true; idTugas={{ $tugas->id }};"
+                                            class="inline-flex items-center gap-2 rounded-md bg-red-600 hover:bg-red-700 text-white px-3 py-2">
+                                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                                                <path
+                                                    d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12ZM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4Z" />
+                                            </svg>
+                                            Hapus
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
 
+            <div class="p-4">
+                {{ $data_tugas->links() }}
+            </div>
         </div>
-
-        <div class="overflow-auto lg:my-2 ">
-            <table class="w-full table-fixed md:w-full md:text-sm text-center  text-gray-500 dark:text-gray-400 ">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr class="">
-                        <th class="w-12 px-4 py-3 lg:p-0 ">No</th>
-                        <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Tugas</th>
-                        <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Project</th>
-                        <th class="w-56 mx-4 py-3 lg:p-4 ">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($data_tugas as $tugas)
-                        <tr class="xl:text-base">
-                            <td class="px-4 py-3 lg:p-0">{{ $data_tugas->firstItem() + $loop->index }}</td>
-                            <td class="px-4 py-3 lg:p-0">
-                                {{ $tugas->nama_tugas }}
-                            </td>
-                            <td class="px-4 py-3 lg:py-4 text-center">
-                                <a href="{{ route('admin.project', $tugas->slug) }}"
-                                    class="inline-flex items-center justify-center w-44 py-2 px-3 bg-amber-500 text-white rounded-lg hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                        width="24px" fill="#FFFFFF">
-                                        <path
-                                            d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
-                                    </svg>
-                                    <span>Lihat Detail Project</span>
-                                </a>
-                            </td>
-
-                            <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
-                                <div class="grid gap-4">
-                                    <button type="button"
-                                        @click="openModalUpdateTugas = !openModalUpdateTugas; idAdmin={{ $tugas->admin->id }}; dataTugas={{ $tugas }};"
-                                        class="py-3 px-6 bg-amber-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                            width="24px" fill="#FFFFFF">
-                                            <path
-                                                d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
-                                        </svg>
-                                        <span>Ubah</span>
-                                    </button>
-
-                                    <button type="button"
-                                        @click="openModalDeleteTugas = !openModalDeleteTugas; idTugas={{ $tugas->id }};"
-                                        class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                            width="24px" fill="#FFFFFF">
-                                            <path
-                                                d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-                                        </svg>
-                                        <span>Hapus</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        {{ $data_tugas->links() }}
 
         {{-- Modal Tambahkan Tugas --}}
-        <div x-show="openModalCreateTugas" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Upload Tugas Baru</h2>
-
-                <form action="{{ route('admin.data.tugas.create', $admin) }}" method="POST" class="grid gap-4">
+        <div x-cloak x-show="openModalCreateTugas"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow w-full max-w-lg p-6">
+                <h3 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-100">Upload Tugas Baru</h3>
+                <form action="{{ route('admin.data.tugas.create', $admin) }}" method="POST" class="space-y-4">
                     @csrf
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Tugas</label>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama
+                            Tugas</label>
                         <input type="text" name="nama_tugas"
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                            class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700/70 px-3 py-2 focus:ring-2 focus:ring-blue-500">
                     </div>
-
                     <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalCreateTugas = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Upload
-                        </button>
+                        <button type="button" @click="openModalCreateTugas=false"
+                            class="rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-2">Batal</button>
+                        <button type="submit"
+                            class="rounded-lg bg-green-600 hover:bg-green-700 text-white px-4 py-2">Upload</button>
                     </div>
                 </form>
             </div>
         </div>
 
         {{-- Modal Update Tugas --}}
-        <div x-show="openModalUpdateTugas" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Update Tugas </h2>
-
-                <form action="{{ route('admin.data.tugas.update') }}" method="POST" class="grid gap-4">
+        <div x-cloak x-show="openModalUpdateTugas"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow w-full max-w-lg p-6">
+                <h3 class="text-lg font-semibold mb-4 text-slate-800 dark:text-slate-100">Update Tugas</h3>
+                <form action="{{ route('admin.data.tugas.update') }}" method="POST" class="space-y-4">
                     @csrf
-
-                    <input type="hidden" name="tugas_id" :value=dataTugas.id></input>
-                    <input type="hidden" name="admin_id" :value=dataTugas.admin.id></input>
-
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Tugas</label>
-                        <input type="text" name="nama_tugas" :value=dataTugas.nama_tugas
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
+                    <input type="hidden" name="tugas_id" :value="dataTugas.id">
+                    <input type="hidden" name="admin_id" :value="dataTugas.admin_id">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nama
+                            Tugas</label>
+                        <input type="text" name="nama_tugas" :value="dataTugas.nama_tugas"
+                            class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700/70 px-3 py-2 focus:ring-2 focus:ring-blue-500">
                     </div>
-
                     <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalUpdateTugas = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Upload
-                        </button>
+                        <button type="button" @click="openModalUpdateTugas=false"
+                            class="rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-2">Batal</button>
+                        <button type="submit"
+                            class="rounded-lg bg-green-600 hover:bg-green-700 text-white px-4 py-2">Upload</button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Modal Delete Tugas -->
-        <div x-show="openModalDeleteTugas" x-cloak
-            class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
-            <form action="{{ route('admin.data.tugas.delete') }}" method="post">
+        {{-- Modal Delete --}}
+        <div x-cloak x-show="openModalDeleteTugas"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+            <form action="{{ route('admin.data.tugas.delete') }}" method="POST" class="w-full max-w-md">
                 @csrf
-                <input type="hidden" :value=idTugas name="id"></input>
-                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                    <!-- Modal content -->
-                    <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <button type="button" @click="openModalDeleteTugas = false"
-                            class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="deleteModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menghapus tugas ini??
-                        </p>
-                        <div class="flex justify-center items-center space-x-4">
-                            <button data-modal-toggle="deleteModal" type="button"
-                                @click="openModalDeleteTugas = false"
-                                class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                Tidak
-                            </button>
-                            <button type="submit"
-                                class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                Ya, saya yakin
-                            </button>
-                        </div>
+                <input type="hidden" name="id" :value="idTugas">
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow p-6 text-center">
+                    <h4 class="text-base font-semibold text-slate-800 dark:text-slate-100 mb-2">Hapus Tugas</h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-4">Apakah anda yakin ingin menghapus tugas
+                        ini?
+                    </p>
+                    <div class="flex justify-center gap-3">
+                        <button type="button" @click="openModalDeleteTugas=false"
+                            class="rounded-lg border border-slate-300 dark:border-slate-600 px-4 py-2">Tidak</button>
+                        <button type="submit" class="rounded-lg bg-red-600 hover:bg-red-700 text-white px-4 py-2">Ya,
+                            saya yakin</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-
 
 </x-layout>

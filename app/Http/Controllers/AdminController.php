@@ -21,7 +21,7 @@ class AdminController extends Controller
     {
         $data_mahasiswa = Mahasiswa::paginate(10);
         // dd($data_mahasiswa);
-        return view('admin.mahasiswa', compact('data_mahasiswa'), ['title' => 'Data Mahasiswa', 'header' => 'Data Mahasiswa']);
+        return view('admin.mahasiswa', compact('data_mahasiswa'), ['title' => 'Dashboard - Data Mahasiswa', 'header' => 'Dashboard - Data Mahasiswa']);
     }
 
     public function tugas()

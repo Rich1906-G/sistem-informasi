@@ -27,7 +27,7 @@
         <div class=" grid gap-4 w-full py-8">
             <div class="flex items-center justify-center">
                 {{-- <label class="font-bold text-2xl font-sans">Detail Project</label> --}}
-                <h2 class="font-bold text-2xl font-sans">Detail Tugas: {{ $data_tugas->nama_tugas }}</h2>
+                <h2 class="font-bold text-2xl font-sans">Detail Tuga: {{ $data_tugas->nama_tugas }}</h2>
             </div>
 
             <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
