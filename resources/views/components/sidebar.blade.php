@@ -25,7 +25,8 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('logout.admin') }}" class="block py-2 px-4 rounded hover:bg-red-700 transition">
+                <a href="{{ route('logout.admin') }}" data-logout-get
+                    class="block py-2 px-4 rounded hover:bg-red-700 transition">
                     🏃‍♂️ Logout
                 </a>
             </li>
