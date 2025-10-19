@@ -31,7 +31,7 @@ class MahasiswaController extends Controller
 
         // dd($data_mahasiswa);
 
-        return view('mahasiswa.mahasiswa', compact('data_mahasiswa'), ['title' => 'Data Mahasiswa', 'header' => 'Data Mahasiswa']);
+        return view('mahasiswa.mahasiswa', compact('data_mahasiswa'), ['title' => 'Dashboard - Data Mahasiswa', 'header' => 'Dashboard - Data Mahasiswa']);
     }
 
     public function tugas()

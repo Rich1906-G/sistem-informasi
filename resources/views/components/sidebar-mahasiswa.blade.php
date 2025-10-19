@@ -1,82 +1,172 @@
-<!-- Sidebar -->
-<aside class="w-64 bg-blue-900 text-white min-h-screen p-4 hidden md:block">
-    <h2 class="text-xl font-bold mb-6">Dashboard Mahasiswa</h2>
-    <nav>
-        <ul class="space-y-4">
-            <li>
-                <a href="{{ route('mahasiswa.dashboard') }}"
-                    class="flex items-center gap-2 py-2 px-4 rounded hover:bg-blue-700 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#FFFFFF">
-                        <path
-                            d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
-                    </svg>
-                    Dashboard
-                </a>
-            </li>
+{{-- ===================== SIDEBAR MAHASISWA (DESKTOP) ===================== --}}
+<aside
+    class="hidden md:flex md:flex-col md:sticky md:top-0 md:h-screen md:w-[245px]
+         bg-gradient-to-b from-blue-900 via-indigo-900 to-blue-900
+         text-white p-4 gap-4 ring-1 ring-white/10 shadow-xl">
+
+    {{-- Brand --}}
+    <a href="{{ route('mahasiswa.dashboard') }}" class="flex items-center gap-3 px-2 pt-2">
+        <img src="{{ asset('images/logo_rsgm.png') }}" alt="Logo"
+            class="h-10 w-10 rounded-xl ring-1 ring-white/20 bg-white/5 object-contain" />
+        <div>
+            <h2 class="text-lg font-semibold leading-tight">Dashboard Mahasiswa</h2>
+        </div>
+    </a>
+
+    {{-- Nav --}}
+    <nav class="mt-3">
+        <ul class="space-y-2">
+
+
+            {{-- Profile Mahasiswa --}}
             <li>
                 <a href="{{ route('mahasiswa.mahasiswa') }}"
-                    class="flex items-center gap-2 py-2 px-4 rounded hover:bg-blue-700 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#FFFFFF">
-                        <path
-                            d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z" />
-                    </svg> Profile Mahasiswa
+                    class="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all
+                  {{ request()->routeIs('mahasiswa.mahasiswa')
+                      ? 'bg-white/15 text-white ring-1 ring-white/20 shadow'
+                      : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                    <svg class="h-5 w-5 opacity-90 group-hover:opacity-100" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                    </svg>
+                    <span>Profile Mahasiswa</span>
                 </a>
             </li>
+
+            {{-- Tugas --}}
             <li>
                 <a href="{{ route('mahasiswa.tugas') }}"
-                    class="flex items-center gap-2 py-2 px-4 rounded hover:bg-blue-700 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#FFFFFF">
-                        <path
-                            d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h168q13-36 43.5-58t68.5-22q38 0 68.5 22t43.5 58h168q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm80-80h280v-80H280v80Zm0-160h400v-80H280v80Zm0-160h400v-80H280v80Zm200-190q13 0 21.5-8.5T510-820q0-13-8.5-21.5T480-850q-13 0-21.5 8.5T450-820q0 13 8.5 21.5T480-790ZM200-200v-560 560Z" />
+                    class="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all
+                  {{ request()->routeIs('mahasiswa.tugas')
+                      ? 'bg-white/15 text-white ring-1 ring-white/20 shadow'
+                      : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                    <svg class="h-5 w-5 opacity-90 group-hover:opacity-100" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="16" rx="2" />
+                        <path d="M8 8h8M8 12h6M8 16h4" />
                     </svg>
-                    Tugas
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('logout.mahasiswa') }}" data-logout-get
-                    class="flex items-center gap-2 py-2 px-4 rounded hover:bg-red-700 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                        fill="#FFFFFF">
-                        <path
-                            d="M200-120q-33 0-56.5-23.5T120-200v-160h80v160h560v-560H200v160h-80v-160q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm220-160-56-58 102-102H120v-80h346L364-622l56-58 200 200-200 200Z" />
-                    </svg>
-                    Logout
+                    <span>Tugas</span>
                 </a>
             </li>
         </ul>
     </nav>
+
+    {{-- Footer + Logout --}}
+    <div class="mt-auto">
+        <a href="{{ route('logout.mahasiswa') }}" data-logout-get
+            class="group flex items-center gap-3 px-3 py-2 rounded-xl transition-all
+              bg-red-500/15 text-red-100 hover:bg-red-500/25 ring-1 ring-red-200/30">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 17l5-5-5-5" />
+                <path d="M15 12H3" />
+                <path d="M21 21V3" />
+            </svg>
+            <span>Logout</span>
+        </a>
+        <p class="mt-3 text-center text-xs text-white/60">© {{ date('Y') }} Logbook • v1.0</p>
+    </div>
 </aside>
 
-<!-- Mobile Sidebar (drawer) -->
-<div x-data="{ open: false }" class="md:hidden">
-    <!-- Button -->
-    <button @click="open = !open" class="p-4 bg-blue-900 text-white w-full flex justify-between">
-        <span>Menu</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-            class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
+{{-- ===================== TOPBAR + DRAWER (MOBILE) ===================== --}}
+<div x-data="{ open: false }" x-effect="document.body.classList.toggle('overflow-hidden', open)" class="md:hidden">
+    {{-- Topbar --}}
+    <header class="sticky top-0 z-30 bg-white/85 backdrop-blur border-b border-slate-200">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button @click="open = true"
+                class="inline-flex items-center gap-2 rounded-lg px-3 py-2 border border-slate-300 bg-white text-slate-700 shadow-sm active:scale-[.99] cursor-pointer">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <a href="{{ route('mahasiswa.dashboard') }}" class="flex items-center gap-2">
+                <img src="{{ asset('images/logo_rsgm.png') }}" alt="Logo"
+                    class="h-8 w-8 rounded-md ring-1 ring-slate-200 object-contain">
+                <span class="font-semibold text-slate-800">Dashboard Mahasiswa</span>
+            </a>
+        </div>
+    </header>
 
-    <!-- Drawer -->
-    <div x-show="open" class="absolute bg-blue-900 text-white w-2/3 h-screen p-4">
-        <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
-        <nav>
-            <ul class="space-y-4">
-                <li>
-                    <a href="#" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
-                        📘 Data Mahasiswa
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
-                        📝 Tugas
-                    </a>
-                </li>
-            </ul>
-        </nav>
+    {{-- Overlay + Panel --}}
+    <div x-cloak x-show="open" x-transition.opacity class="fixed inset-0 z-40">
+        <div class="absolute inset-0 bg-black/40" @click="open=false" aria-hidden="true"></div>
+
+        <div x-show="open" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="-translate-x-full opacity-0" x-transition:enter-end="translate-x-0 opacity-100"
+            x-transition:leave="transition ease-in duration-150" x-transition:leave-start="translate-x-0 opacity-100"
+            x-transition:leave-end="-translate-x-full opacity-0" @keydown.escape.window="open=false"
+            class="absolute left-0 top-0 h-full w-[88vw] max-w-xs p-4
+                bg-gradient-to-b from-blue-900 via-indigo-900 to-blue-900
+                text-white ring-1 ring-white/10 shadow-2xl
+                flex flex-col ">
+
+            {{-- Header kecil --}}
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <img src="{{ asset('images/logo_rsgm.png') }}"
+                        class="h-8 w-8 rounded-md ring-1 ring-white/20 object-contain" alt="Logo" />
+                    <span class="font-semibold">Dashboard Mahasiswa</span>
+                </div>
+                <button @click="open=false"
+                    class="p-2 rounded-lg bg-white/10 hover:bg-white/20 ring-1 ring-white/20 cursor-pointer">
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2">
+                        <path d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span class="sr-only">Tutup</span>
+                </button>
+            </div>
+
+            {{-- NAV (scrollable) --}}
+            <nav class="flex-1 overflow-y-auto">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="{{ route('mahasiswa.mahasiswa') }}"
+                            class="block px-3 py-2 rounded-lg
+                      {{ request()->routeIs('mahasiswa.mahasiswa') ? 'bg-white/15 ring-1 ring-white/20 shadow' : 'hover:bg-white/10' }}">
+                            <div class="flex items-center gap-2">
+                                <svg class="h-5 w-5 opacity-90" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                                </svg>
+                                <span>Profile Mahasiswa</span>
+                            </div>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('mahasiswa.tugas') }}"
+                            class="block px-3 py-2 rounded-lg
+                      {{ request()->routeIs('mahasiswa.tugas') ? 'bg-white/15 ring-1 ring-white/20 shadow' : 'hover:bg-white/10' }}">
+                            <div class="flex items-center gap-2">
+                                <svg class="h-5 w-5 opacity-90" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" />
+                                    <path d="M8 8h8M8 12h6M8 16h4" />
+                                </svg>
+                                <span>Tugas</span>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            {{-- FOOTER (Logout tetap di bawah) --}}
+            <div class="pt-3 border-t border-white/10">
+                <a href="{{ route('logout.mahasiswa') }}" data-logout-get
+                    class="block px-3 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 ring-1 ring-red-200/30">
+                    <div class="flex items-center gap-2">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M10 17l5-5-5-5" />
+                            <path d="M15 12H3" />
+                            <path d="M21 21V3" />
+                        </svg>
+                        <span>Logout</span>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 </div>

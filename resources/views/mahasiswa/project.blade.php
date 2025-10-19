@@ -2,15 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ asset('images/logo_rsgm.png') }}">
     <x-title>{{ $title }}</x-title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <style>
         [x-cloak] {
-            display: none !important;
+            display: none !important
         }
     </style>
 </head>
@@ -20,250 +19,396 @@
         openModalUploadProject: false,
         openModalUpdateProject: false,
         openModalDeleteProject: false,
-        idTugas: null,
+        idTugas: {{ $slugTugas->id }},
         idProject: null,
-        dataProject: [],
-    }" class="flex max-w-7xl mx-auto p-4  items-center justify-center">
-        <div class=" grid gap-4 w-full py-8">
-            <div class="flex items-center justify-center">
-                {{-- <label class="font-bold text-2xl font-sans">Detail Project</label> --}}
-                <h2 class="font-bold text-2xl font-sans">Detail Tugas : {{ $slugTugas->nama_tugas }}</h2>
+        dataProject: {},
+        keyword: '{{ request('search') }}',
+    }" class="mx-auto w-full max-w-7xl px-4 sm:px-6 md:px-8 py-8">
+        <section
+            class="rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-lg ring-1 ring-slate-200/70 dark:ring-gray-700">
+            {{-- ===== HERO / HEADER ===== --}}
+            <div class="relative">
+                <div class="h-24 bg-gradient-to-r from-blue-900 via-indigo-800 to-blue-700"></div>
+                <div class="-mt-10 px-4 sm:px-6">
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-white drop-shadow">
+                                Detail Tugas: {{ $slugTugas->nama_tugas }}
+                            </h2>
+                            <p class="text-white/80 text-sm drop-shadow">
+                                {{ number_format($dataProject->total()) }} project terdaftar
+                            </p>
+                        </div>
+
+                        {{-- Search --}}
+                        <form action="#" method="GET" class="w-full lg:w-auto">
+                            <div class="relative">
+                                <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="m21 21-3.5-3.5" />
+                                    <circle cx="10" cy="10" r="7" />
+                                </svg>
+                                <input x-model="keyword" id="search" name="search" autocomplete="off"
+                                    placeholder="Cari project…" type="search"
+                                    class="w-full lg:w-96 rounded-xl border border-slate-300 bg-white pl-10 pr-20 py-2.5 text-sm text-slate-900
+                       outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                       dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+                                <div class="absolute right-2 top-1/2 -translate-y-1/2 flex gap-2">
+                                    <button type="button" @click="keyword=''; $refs.searchForm.submit()"
+                                        class="hidden sm:inline-flex items-center rounded-lg bg-slate-100 px-2 py-1 text-xs text-slate-600 hover:bg-slate-200">
+                                        Clear
+                                    </button>
+                                    <button type="submit"
+                                        class="inline-flex items-center rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="submit" class="hidden" x-ref="searchForm" />
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex flex-col items-center py-4 md:flex-row md:space-y-0 lg:justify-end ">
-                <div class="w-full md:w-full lg:w-1/2">
-                    <form action="#" method="GET">
-                        <div
-                            class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0 lg:mb-0    lg:mx-0 lg:max-w-screen-lg">
-                            <div class="relative w-full">
-                                <label for="search"
-                                    class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ">Search</label>
-                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                            d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </div>
+            {{-- ===== DESKTOP TABLE ===== --}}
+            <div class="hidden md:block p-4 sm:p-6">
+                <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-gray-700">
+                    <table class="min-w-full text-sm">
+                        <thead
+                            class="bg-slate-50 dark:bg-gray-700 text-slate-700 dark:text-gray-200 text-xs uppercase sticky top-0">
+                            <tr>
+                                <th class="px-4 py-3 text-center w-16">No</th>
+                                <th class="px-4 py-3 text-left">Nama Project</th>
+                                <th class="px-4 py-3 text-left">File Project</th>
+                                <th class="px-4 py-3 text-center w-36">Status</th>
+                                <th class="px-4 py-3 text-center w-64">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-gray-700">
+                            @foreach ($dataProject as $project)
+                                @php
+                                    $attach = $project->mahasiswa->first() ?? null;
+                                    $status = strtolower($project->status ?? '');
+                                    $badge =
+                                        $status === 'selesai' || $status === 'approved'
+                                            ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                                            : ($status === 'revisi' || $status === 'rejected'
+                                                ? 'bg-rose-50 text-rose-700 ring-rose-200'
+                                                : 'bg-amber-50 text-amber-700 ring-amber-200');
+                                    $label = $project->status ?? 'Proses';
+                                @endphp
+                                <tr
+                                    class="odd:bg-white even:bg-slate-50 dark:odd:bg-gray-800 dark:even:bg-gray-800/70 hover:bg-slate-50 dark:hover:bg-gray-700/60">
+                                    <td class="px-4 py-3 text-center">
+                                        {{ $dataProject->firstItem() + $loop->index }}
+                                    </td>
+                                    <td class="px-4 py-3 font-medium text-slate-900 dark:text-gray-100">
+                                        {{ $project->nama_project }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        @if ($attach && ($attach->pivot->file_project ?? null))
+                                            <a href="{{ asset('storage/' . $attach->pivot->file_project) }}"
+                                                target="_blank"
+                                                class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 underline underline-offset-2">
+                                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                                    <path
+                                                        d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
+                                                </svg>
+                                                Lihat File
+                                            </a>
+                                        @else
+                                            <span class="text-slate-400 italic">Belum ada file</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <span
+                                            class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 {{ $badge }}">
+                                            {{ $label }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button
+                                                @click="
+                        openModalUploadProject=true;
+                        dataProject=@json($project);
+                        idProject={{ $project->id }};
+                      "
+                                                class="inline-flex items-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+                                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path d="M12 5v14" />
+                                                    <path d="M5 12h14" />
+                                                </svg>
+                                                Upload
+                                            </button>
 
-                                <input autocomplete="off" type="text"
-                                    class="block p-3 pl-10 w-full text-sm md:block md:w-full text-gray-900 
-                                          bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none 
-                                          sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
-                                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Cara Data" type="search" id="search" name="search">
-                            </div>
+                                            <button
+                                                @click="
+                        openModalUpdateProject=true;
+                        dataProject=@json($project);
+                        idProject={{ $project->id }};
+                      "
+                                                class="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-3 py-2 text-white hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
+                                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2">
+                                                    <path d="M15 12l-8 8H3v-4l8-8" />
+                                                    <path d="M18.5 2.5l3 3" />
+                                                </svg>
+                                                Ubah
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            @if ($dataProject->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="px-4 py-12 text-center text-slate-500 dark:text-gray-300">
+                                        Belum ada project.
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">{{ $dataProject->links() }}</div>
+            </div>
+
+            {{-- ===== MOBILE CARDS ===== --}}
+            <div class="md:hidden p-4 sm:p-6 space-y-3">
+                @foreach ($dataProject as $project)
+                    @php
+                        $attach = $project->mahasiswa->first() ?? null;
+                        $status = strtolower($project->status ?? '');
+                        $badge =
+                            $status === 'selesai' || $status === 'approved'
+                                ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                                : ($status === 'revisi' || $status === 'rejected'
+                                    ? 'bg-rose-50 text-rose-700 ring-rose-200'
+                                    : 'bg-amber-50 text-amber-700 ring-amber-200');
+                        $label = $project->status ?? 'Proses';
+                    @endphp
+                    <div
+                        class="rounded-2xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm">
+                        <div class="flex items-start justify-between gap-3">
                             <div>
-                                <button type="submit"
-                                    class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-blue-700 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search
-                                </button>
+                                <p class="text-xs text-slate-500">#{{ $dataProject->firstItem() + $loop->index }}</p>
+                                <h3 class="mt-1 text-base font-semibold text-slate-900 dark:text-white">
+                                    {{ $project->nama_project }}
+                                </h3>
                             </div>
+                            <span
+                                class="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 {{ $badge }}">
+                                {{ $label }}
+                            </span>
+                        </div>
+
+                        <div class="mt-3 text-sm">
+                            @if ($attach && ($attach->pivot->file_project ?? null))
+                                <a href="{{ asset('storage/' . $attach->pivot->file_project) }}" target="_blank"
+                                    class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-800 underline underline-offset-2">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                        <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z" />
+                                    </svg>
+                                    Lihat File
+                                </a>
+                            @else
+                                <span class="text-slate-400 italic">Belum ada file</span>
+                            @endif
+                        </div>
+
+                        <div class="mt-4 grid grid-cols-2 gap-2">
+                            <button
+                                @click="
+                openModalUploadProject=true;
+                dataProject=@json($project);
+                idProject={{ $project->id }};
+              "
+                                class="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700">
+                                Upload
+                            </button>
+                            <button
+                                @click="
+                openModalUpdateProject=true;
+                dataProject=@json($project);
+                idProject={{ $project->id }};
+              "
+                                class="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-3 py-2 text-sm text-white hover:bg-amber-600">
+                                Ubah
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+
+                <div class="mt-3">{{ $dataProject->links() }}</div>
+            </div>
+
+            {{-- ===== Footer actions ===== --}}
+            <div class="px-4 sm:px-6 pb-6 flex items-center justify-end">
+                <a href="{{ route('mahasiswa.tugas') }}"
+                    class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                    ← Kembali
+                </a>
+            </div>
+        </section>
+
+        {{-- ================= MODAL: UPLOAD ================= --}}
+        <div x-cloak x-show="openModalUploadProject" x-transition class="fixed inset-0 z-50" role="dialog"
+            aria-modal="true">
+            <div class="absolute inset-0 bg-black/50" @click="openModalUploadProject=false"></div>
+
+            <div class="relative mx-auto my-8 w-full max-w-2xl px-4">
+                <div
+                    class="relative rounded-2xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-slate-200 dark:ring-gray-700 p-5 sm:p-6">
+                    <button @click="openModalUploadProject=false"
+                        class="absolute top-3 right-3 p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                        aria-label="Tutup modal">
+                        <svg class="h-5 w-5 text-slate-700 dark:text-gray-200" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Upload Project</h2>
+
+                    <form action="{{ route('mahasiswa.upload.project') }}" method="POST"
+                        enctype="multipart/form-data" class="grid gap-4">
+                        @csrf
+                        <input type="hidden" name="tugas_id" :value="idTugas">
+                        <input type="hidden" name="project_id" :value="idProject">
+
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">Nama Project</label>
+                            <input type="text" name="nama_project" :value="dataProject.nama_project" readonly
+                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" />
+                        </div>
+
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">File Project (PDF)</label>
+                            <input type="file" name="file_project" accept="application/pdf"
+                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none
+                          file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 hover:file:bg-slate-200
+                          dark:bg-gray-700 dark:border-gray-600" />
+                        </div>
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button" @click="openModalUploadProject=false"
+                                class="rounded-lg bg-slate-200 px-4 py-2 text-slate-700 hover:bg-slate-300 dark:bg-gray-700 dark:text-gray-200">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+                                Upload
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
-
-            <div class="overflow-auto lg:my-2 rounded-lg shadow-slate-300 shadow-xl">
-                <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                        <tr class="">
-                            <th class="px-4 py-3 lg:p-4 ">No</th>
-                            <th class="px-4 py-3 lg:p-4 ">Nama Project</th>
-                            <th class="px-4 py-3 lg:p-4 ">File Project</th>
-                            <th class="px-4 py-3 lg:p-4 ">Status</th>
-                            <th class="mx-4 py-3 lg:p-4 ">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($dataProject as $project)
-                            <tr class="xl:text-base">
-                                <td class="px-4 py-3 lg:px-8">{{ $dataProject->firstItem() + $loop->index }}
-                                </td>
-                                <td class="px-4 py-3 lg:py-4 text-center">
-                                    {{ $project->nama_project }}
-
-                                </td>
-                                {{-- cek apakah mahasiswa login punya pivot untuk project ini --}}
-                                @php
-                                    $attach = $project->mahasiswa->first() ?? null;
-                                @endphp
-
-                                <td class="px-4 py-3 lg:p-4">
-                                    @if ($attach && isset($attach->pivot->file_project) && $attach->pivot->file_project)
-                                        <a href="{{ asset('storage/' . $attach->pivot->file_project) }}" target="_blank"
-                                            class="text-blue-600 hover:underline">
-                                            Lihat File
-                                        </a>
-                                    @else
-                                        <span class="text-gray-400 italic">Belum ada file</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3 lg:p-4 text-center">
-                                    {{ $project->status ?? 'Tidak Ada' }}
-                                </td>
-
-                                <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
-                                    <div class="grid gap-4 w-44">
-                                        <button type="button"
-                                            @click="openModalUploadProject = !openModalUploadProject; dataProject={{ $project }}; idTugas={{ $project->id }};"
-                                            class="flex items-center gap-2 justify-center px-5 py-2.5 bg-green-700 text-white rounded-lg hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 w-full">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
-                                            </svg>
-                                            <span class="inline-flex">Upload Project</span>
-                                        </button>
-
-                                        <button type="button"
-                                            @click="openModalUpdateProject = !openModalUpdateProject; dataProject={{ $project }}; idTugas={{ $project->id }}"
-                                            class="py-3 px-6 bg-amber-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
-                                            </svg>
-                                            <span>Ubah</span>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{ $dataProject->links() }}
-
-            <div class="flex items-center justify-end mt-5">
-                <a href="{{ route('mahasiswa.tugas') }}"
-                    class="p-4 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 rounded-lg text-white">
-                    Kembali
-                </a>
-            </div>
         </div>
 
-        {{-- Modal Create Project --}}
-        <div x-show="openModalUploadProject" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Upload Project</h2>
+        {{-- ================= MODAL: UPDATE ================= --}}
+        <div x-cloak x-show="openModalUpdateProject" x-transition class="fixed inset-0 z-50" role="dialog"
+            aria-modal="true">
+            <div class="absolute inset-0 bg-black/50" @click="openModalUpdateProject=false"></div>
 
-                <form action="{{ route('mahasiswa.upload.project') }}" method="POST" class="grid gap-4"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="project_id" :value=dataProject.id>
-                    <input type="hidden" name="tugas_id" :value=idTugas>
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Project</label>
-                        <input type="text" name="nama_project" :value=dataProject.nama_project readonly
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
-                            Project</label>
-                        <input
-                            class="block w-full mb-5 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            type="file" accept="application/pdf" name="file_project">
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalUploadProject = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Upload
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {{-- Modal Update Tugas --}}
-        <div x-show="openModalUpdateProject" x-cloak
-            class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Update Tugas</h2>
-
-                <form action="{{ route('mahasiswa.update.project') }}" method="POST" class="grid gap-4"
-                    enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Project</label>
-                        <input type="text" name="nama_project" :value=dataProject.nama_project
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="project_id" :value=dataProject.id></input>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File
-                            Project</label>
-                        <input
-                            class="block w-full mb-5 px-3 py-2 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            type="file" accept="application/pdf" name="file_project"
-                            :value=dataProject.file_project>
-                        <input type="hidden" name="tugas_id" :value=idTugas>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalUpdateProject = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Update
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Modal Delete Tugas -->
-        <div x-show="openModalDeleteProject" x-cloak
-            class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
-            <form action="{{ route('admin.delete.project') }}" method="post">
-                @csrf
-                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                    <!-- Modal content -->
-                    <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <button type="button" @click="openModalDeleteProject = false"
-                            class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="deleteModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                        <input type="hidden" name="id" :value=idProject></input>
-                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd">
-                            </path>
+            <div class="relative mx-auto my-8 w-full max-w-2xl px-4">
+                <div
+                    class="relative rounded-2xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-slate-200 dark:ring-gray-700 p-5 sm:p-6">
+                    <button @click="openModalUpdateProject=false"
+                        class="absolute top-3 right-3 p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                        aria-label="Tutup modal">
+                        <svg class="h-5 w-5 text-slate-700 dark:text-gray-200" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menghapus project
-                            ini??
-                        </p>
-                        <div class="flex justify-center items-center space-x-4">
-                            <button @click="openModalDeleteProject = false" type="button"
-                                class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                Tidak
+                    </button>
+
+                    <h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-white">Ubah Project</h2>
+
+                    <form action="{{ route('mahasiswa.update.project') }}" method="POST"
+                        enctype="multipart/form-data" class="grid gap-4">
+                        @csrf
+                        <input type="hidden" name="tugas_id" :value="idTugas">
+                        <input type="hidden" name="project_id" :value="idProject">
+
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">Nama Project</label>
+                            <input type="text" name="nama_project" :value="dataProject.nama_project"
+                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600" />
+                        </div>
+
+                        <div>
+                            <label class="block mb-1 text-sm font-medium">Ganti File Project (PDF)</label>
+                            {{-- penting: input file TIDAK boleh ada :value --}}
+                            <input type="file" name="file_project" accept="application/pdf"
+                                class="w-full rounded-lg border border-slate-300 px-3 py-2 focus:outline-none
+                          file:mr-3 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 hover:file:bg-slate-200
+                          dark:bg-gray-700 dark:border-gray-600" />
+                        </div>
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button" @click="openModalUpdateProject=false"
+                                class="rounded-lg bg-slate-200 px-4 py-2 text-slate-700 hover:bg-slate-300 dark:bg-gray-700 dark:text-gray-200">
+                                Batal
                             </button>
                             <button type="submit"
-                                class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                Ya, saya yakin
+                                class="rounded-lg bg-green-600 px-4 py-2 text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+                                Simpan
                             </button>
                         </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
+
+        {{-- ================= (Optional) MODAL: DELETE ================= --}}
+        <div x-cloak x-show="openModalDeleteProject" x-transition class="fixed inset-0 z-50" role="dialog"
+            aria-modal="true">
+            <div class="absolute inset-0 bg-black/50" @click="openModalDeleteProject=false"></div>
+
+            <div class="relative mx-auto my-8 w-full max-w-md px-4">
+                <div
+                    class="relative rounded-2xl bg-white dark:bg-gray-800 shadow-xl ring-1 ring-slate-200 dark:ring-gray-700 p-5 sm:p-6 text-center">
+                    <button @click="openModalDeleteProject=false"
+                        class="absolute top-3 right-3 p-2 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600"
+                        aria-label="Tutup modal">
+                        <svg class="h-5 w-5 text-slate-700 dark:text-gray-200" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+
+                    <svg class="mx-auto mb-3.5 h-11 w-11 text-slate-400 dark:text-gray-500" aria-hidden="true"
+                        viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 1 0 0 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <p class="mb-4 text-slate-600 dark:text-gray-300">Apakah kamu yakin ingin menghapus project ini?
+                    </p>
+                    <form action="{{ route('admin.delete.project') }}" method="POST"
+                        class="flex justify-center gap-3">
+                        @csrf
+                        <input type="hidden" name="id" :value="idProject" />
+                        <button type="button" @click="openModalDeleteProject=false"
+                            class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
+                            Tidak
+                        </button>
+                        <button type="submit"
+                            class="rounded-lg bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300">
+                            Ya, hapus
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 
