@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
 use App\Models\Admin;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class AdminSeeder extends Seeder
 {
@@ -13,11 +15,18 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::create([
-            'account_id' => 1,
-            'nama' => 'David Richardo Gultom',
-            'email' => 'davidgultomm@gmail.com',
-            'no_hp' => '082268742976',
-        ]);
+        $dataAkun = Account::where('role', 'Admin')->get();
+        $faker = Faker::create('id_ID');
+
+        foreach ($dataAkun as $akun) {
+            for ($i = 0; $i < 5; $i++) {
+                Admin::create([
+                    'account_id' => $akun->id,
+                    'nama' => $faker->name(),
+                    'email' => $faker->unique()->safeEmail,
+                    'no_hp' => $faker->phoneNumber(),
+                ]);
+            }
+        }
     }
 }

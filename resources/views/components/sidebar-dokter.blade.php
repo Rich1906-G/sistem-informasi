@@ -4,29 +4,28 @@
     <nav>
         <ul class="space-y-4">
             <li>
-                <a href="{{ route('prodi.dashboard') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                <a href="{{ route('dokter.dashboard') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
                     🏠 Dashboard
                 </a>
             </li>
-            <li>
+            {{-- <li>
                 <a href="#" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
                     📘 Data Mahasiswa
                 </a>
-            </li>
+            </li> --}}
             <li>
-                <a href="{{ route('prodi.tugas.mahasiswa') }}"
-                    class="block py-2 px-4 rounded hover:bg-blue-700 transition">
-                    📝 Tugas
+                <a href="{{ route('dokter.data.tugas') }}" class="block py-2 px-4 rounded hover:bg-blue-700 transition">
+                    📝 Data Tugas
                 </a>
             </li>
             <li>
-                <a href="{{ route('prodi.project.mahasiswa') }}"
+                <a href="{{ route('dokter.tugas.mahasiswa') }}"
                     class="block py-2 px-4 rounded hover:bg-blue-700 transition">
-                    📝 Project
+                    📝 Tugas Mahasiswa
                 </a>
             </li>
             <li>
-                <a href="{{ route('logout.dosen') }}" class="block py-2 px-4 rounded hover:bg-red-700 transition">
+                <a href="{{ route('logout.dokter') }}" class="block py-2 px-4 rounded hover:bg-red-700 transition">
                     🏃‍♂️ Logout
                 </a>
             </li>

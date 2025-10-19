@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Models\Account;
 use App\Models\Mahasiswa;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 
 class MahasiswaSeeder extends Seeder
 {
@@ -19,64 +22,24 @@ class MahasiswaSeeder extends Seeder
 
         // Storage::disk('public')->put('foto', $fileName, 'content dummy');
 
+        $faker = Faker::create('id_ID');
 
-        Mahasiswa::create([
-            'account_id' => 2,
-            'nama_mahasiswa' => 'David Richardo Gultom',
-            'nim' => fake()->unique()->numberBetween(1000, 9999),
-            'semester' => '7',
-            'email' => 'DavidgultomM@gmail.com',
-            'alamat' => 'Jln. Kertas No 15A',
-            'no_hp' => '082268742976',
-            'pas_foto' => 'storage/' . $nama_pas_foto_david,
-            'nama_pas_foto' => $nama_pas_foto_david,
-        ]);
+        $roleMahasiswa = Account::where('role', 'Mahasiswa')->get();
 
-        Mahasiswa::create([
-            'account_id' => 3,
-            'nama_mahasiswa' => 'Adrian Hutabarat',
-            'nim' => fake()->unique()->numberBetween(1000, 9999),
-            'semester' => '7',
-            'email' => 'adrianhutabarat13@gmail.com',
-            'alamat' => 'Jalan Adiankoting',
-            'no_hp' => '085258221329',
-            'pas_foto' => 'storage/' . $nama_pas_foto_adrian,
-            'nama_pas_foto' => $nama_pas_foto_adrian,
-        ]);
-
-        Mahasiswa::create([
-            'account_id' => 4,
-            'nama_mahasiswa' => 'Jonathan Purba',
-            'nim' => fake()->unique()->numberBetween(1000, 9999),
-            'semester' => '7',
-            'email' => 'nathanpb@gmail.com',
-            'alamat' => 'Jln. Kuali No 64',
-            'no_hp' => '082268742976',
-            'pas_foto' => 'storage/' . $nama_pas_foto_david,
-            'nama_pas_foto' => $nama_pas_foto_david,
-        ]);
-
-        Mahasiswa::create([
-            'account_id' => 5,
-            'nama_mahasiswa' => 'Stephan Panggabean',
-            'nim' => fake()->unique()->numberBetween(1000, 9999),
-            'semester' => '7',
-            'email' => 'StephanimmanuelM@gmail.com',
-            'alamat' => 'Jln. Sendok No 87',
-            'no_hp' => '082268742976',
-            'pas_foto' => 'storage/' . $nama_pas_foto_david,
-            'nama_pas_foto' => $nama_pas_foto_david,
-        ]);
-        Mahasiswa::create([
-            'account_id' => 6,
-            'nama_mahasiswa' => 'Anderson Nababan',
-            'nim' => fake()->unique()->numberBetween(1000, 9999),
-            'semester' => '7',
-            'email' => 'AndersonNbb@gmail.com',
-            'alamat' => 'Jln. Kertas No 115',
-            'no_hp' => '082268742976',
-            'pas_foto' => 'storage/' . $nama_pas_foto_david,
-            'nama_pas_foto' => $nama_pas_foto_david,
-        ]);
+        foreach ($roleMahasiswa as $mahasiswa) {
+            $nama = $faker->name();
+            Mahasiswa::create([
+                'account_id' => $mahasiswa->id,
+                'nama_mahasiswa' => $nama,
+                'slug' => Str::slug($nama),
+                'nim' => $faker->numberBetween(100000000000, 999999999999),
+                'semester' => $faker->randomDigit(),
+                'email' => $faker->unique()->safeEmail,
+                'alamat' => $faker->address,
+                'no_hp' => $faker->phoneNumber(),
+                'pas_foto' => 'storage/' . $nama_pas_foto_david,
+                'nama_pas_foto' => $nama_pas_foto_david,
+            ]);
+        }
     }
 }

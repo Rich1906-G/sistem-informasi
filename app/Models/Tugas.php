@@ -11,9 +11,9 @@ class Tugas extends Model
 
     protected $guarded = [];
 
-    public function admin()
+    public function dokter()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->belongsTo(Dokter::class);
     }
 
     public function project()

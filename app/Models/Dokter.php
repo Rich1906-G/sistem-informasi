@@ -3,13 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Admin extends Model
+class Dokter extends Model
 {
-    protected $table = 'admin';
+    protected $table = 'dokter';
 
     protected $guarded = [];
+
+
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class);
+    }
 
     public function account()
     {

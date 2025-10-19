@@ -13,9 +13,9 @@ class AuthController extends Controller
     {
         return view('auth.admin.login');
     }
-    public function loginProdi()
+    public function loginDokter()
     {
-        return view('auth.prodi.login');    
+        return view('auth.dokter.login');
     }
     public function loginMahasiswa()
     {
@@ -68,7 +68,7 @@ class AuthController extends Controller
         return redirect()->back();
     }
 
-    public function authProdi(Request $request)
+    public function authDokter(Request $request)
     {
         $credentials = $request->validate([
             'username' => 'required',
@@ -80,8 +80,8 @@ class AuthController extends Controller
 
             $account = Auth::guard('account')->user();
 
-            if ($account->role === 'Prodi') {
-                return redirect()->route('prodi.dashboard');
+            if ($account->role === 'Dokter') {
+                return redirect()->route('dokter.dashboard');
             } else {
                 Auth::guard('account')->logout();
                 return redirect()->back();
@@ -97,11 +97,11 @@ class AuthController extends Controller
 
         return redirect()->route('login.admin');
     }
-    public function logoutDosen()
+    public function logoutDokter()
     {
         Auth::guard('account')->logout();
 
-        return redirect()->route('login.dosen');
+        return redirect()->route('login.dokter');
     }
     public function logoutMahasiswa()
     {
