@@ -37,7 +37,7 @@ Route::middleware('auth:account')->group(function () {
             Route::post('/data-tugas-create/{idAdmin}', [AdminController::class, 'createTugas'])->name('admin.data.tugas.create');
             Route::post('/data-tugas-update', [AdminController::class, 'updateTugas'])->name('admin.data.tugas.update');
             Route::post('/data-tugas-delete', [AdminController::class, 'deleteTugas'])->name('admin.data.tugas.delete');
-            Route::get('/tugas-mahasiswa', [AdminController::class, 'tugasMahasiswa'])->name(name: 'admin.tugas.mahasiswa');
+            Route::get('/tugas-mahasiswa', [AdminController::class, 'tugasMahasiswa'])->name('admin.tugas.mahasiswa');
 
             Route::get('/detail-project/{tugas:slug}', [AdminController::class, 'project'])->name('admin.project');
             Route::post('/tambah-project', [AdminController::class, 'tambahProject'])->name('admin.tambah.project');
@@ -58,12 +58,16 @@ Route::middleware('auth:account')->group(function () {
             Route::post('/data-tugas-create/{id}', [DokterController::class, 'createTugas'])->name('dokter.data.tugas.create');
             Route::post('/data-tugas-update/{id}', [DokterController::class, 'updateTugas'])->name('dokter.data.tugas.update');
             Route::post('/data-tugas-delete', [DokterController::class, 'deleteTugas'])->name('dokter.data.tugas.delete');
-            Route::get('/tugas-mahasiswa', [DokterController::class, 'tugasMahasiswa'])->name(name: 'dokter.tugas.mahasiswa');
 
             Route::get('/detail-project/{tugas:slug}', [DokterController::class, 'project'])->name('dokter.project');
             Route::post('/tambah-project', [DokterController::class, 'tambahProject'])->name('dokter.tambah.project');
             Route::post('/edit-project', [DokterController::class, 'editProject'])->name('dokter.edit.project');
             Route::post('/delete-project', [DokterController::class, 'deleteProject'])->name('dokter.delete.project');
+
+            Route::get('/detail-project-mahasiswa/{mahasiswa:slug}/{tugas:slug}', [DokterController::class, 'projectMahasiswa'])->name('dokter.project.mahasiswa');
+            Route::post('/setujui-tugas-mahasiswa', [DokterController::class, 'setujui_tugas'])->name('dokter.setujui.tugas');
+            Route::post('/tolak-tugas-mahasiswa', [DokterController::class, 'tolakTugas'])->name('dokter.tolak.tugas');
+            Route::get('/tugas-mahasiswa', [DokterController::class, 'tugasMahasiswa'])->name('dokter.tugas.mahasiswa');
         });
     });
 

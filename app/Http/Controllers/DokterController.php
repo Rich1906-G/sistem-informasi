@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokter;
+use App\Models\Mahasiswa;
 use App\Models\Project;
 use App\Models\Tugas;
 use Illuminate\Http\Request;
@@ -123,6 +124,47 @@ class DokterController extends Controller
         $project = Project::findOrFail($request->id);
 
         $project->delete();
+
+        return redirect()->back();
+    }
+
+    public function projectMahasiswa($mahasiswaSlug, $slug)
+    {
+        $tugas = Tugas::where('slug', $slug)->firstOrFail();
+        $mahasiswa = Mahasiswa::where('slug', $mahasiswaSlug)->firstOrFail();
+
+        $dataProject = Project::where('tugas_id', $tugas->id)
+            ->with(['mahasiswa' => function ($q) use ($mahasiswa) {
+                if ($mahasiswa) {
+                    // pastikan nama tabel/kolom sesuai; 'mahasiswa.id' biasanya aman
+                    $q->where('mahasiswa.id', $mahasiswa->id);
+                }
+            }])
+            ->paginate(10);
+
+        return view('dokter.project-mahasiswa', compact('dataProject', 'tugas', 'mahasiswa'), ['tugasId' => $tugas->id, 'title' => 'Project Mahasiswa']);
+    }
+
+    public function setujui_tugas(Request $request)
+    {
+        $project = Project::findOrFail($request->project_id);
+        $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
+
+        $mahasiswa->project()->updateExistingPivot($project->id, [
+            'status' => 'Disetujui',
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function tolakTugas(Request $request)
+    {
+        $project = Project::findOrFail($request->project_id);
+        $mahasiswa = Mahasiswa::findOrFail($request->mahasiswa_id);
+
+        $mahasiswa->project()->updateExistingPivot($project->id, [
+            'status' => 'Tidak Disetujui',
+        ]);
 
         return redirect()->back();
     }

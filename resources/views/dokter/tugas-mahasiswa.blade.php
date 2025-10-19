@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout-dokter>
 
     <x-slot:title>
         {{ $title }}
@@ -10,7 +10,6 @@
 
     <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg relative md:mx-4 lg:mx-4 xl:my-8 xl:mx-4"
         x-data="{}">
-
 
         <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
             <div class="w-full md:w-full lg:w-1/2">
@@ -67,7 +66,7 @@
                                     <td class="px-4 py-3 lg:py-4">{{ $tugas->nama_tugas }}</td>
                                     <td class="px-4 py-3 lg:py-4">{{ $mahasiswa->nama_mahasiswa ?? 'Tidak ada' }}</td>
                                     <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
-                                        <a href="{{ route('admin.project.mahasiswa', ['mahasiswa' => $mahasiswa->slug, 'tugas' => $tugas->slug]) }}"
+                                        <a href="{{ route('dokter.project.mahasiswa', ['mahasiswa' => $mahasiswa->slug, 'tugas' => $tugas->slug]) }}"
                                             class="py-3 px-6 bg-amber-600 text-white rounded-lg flex items-center justify-center gap-4">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                                 viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
@@ -96,4 +95,4 @@
     </div>
 
 
-</x-layout>
+</x-layout-dokter>
