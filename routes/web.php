@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DokterController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProdiController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,11 @@ Route::middleware('guest')->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/login', [AuthController::class, 'loginAdmin'])->name('login.admin');
         Route::post('/auth-admin', [AuthController::class, 'authAdmin'])->name('login.admin.submit');
+    });
+
+    Route::prefix('dokter')->group(function () {
+        Route::get('/login', [AuthController::class, 'loginDokter'])->name('login.dokter');
+        Route::post('/auth-dokter', [AuthController::class, 'authDokter'])->name('login.dokter.submit');
     });
 
     Route::prefix('mahasiswa')->group(function () {
@@ -45,6 +51,19 @@ Route::middleware('auth:account')->group(function () {
         });
     });
 
+    Route::middleware(['role:Dokter'])->group(function () {
+        Route::prefix('dokter')->group(function () {
+            Route::get('/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
+            Route::get('/data-tugas', [DokterController::class, 'tugas'])->name('dokter.data.tugas');
+            Route::post('/data-tugas-create/{id}', [DokterController::class, 'createTugas'])->name('dokter.data.tugas.create');
+            Route::post('/data-tugas-update/{id}', [DokterController::class, 'updateTugas'])->name('dokter.data.tugas.update');
+            Route::post('/data-tugas-delete', [DokterController::class, 'deleteTugas'])->name('dokter.data.tugas.delete');
+            Route::get('/tugas-mahasiswa', [DokterController::class, 'tugasMahasiswa'])->name(name: 'dokter.tugas.mahasiswa');
+
+            Route::get('/detail-project/{tugas:slug}', [DokterController::class, 'project'])->name('dokter.project');
+        });
+    });
+
     Route::middleware(['role:Mahasiswa'])->group(function () {
         Route::prefix('mahasiswa')->group(function () {
             Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('mahasiswa.dashboard');
@@ -57,5 +76,6 @@ Route::middleware('auth:account')->group(function () {
     });
 
     Route::get('/logout-admin', [AuthController::class, 'logoutAdmin'])->name('logout.admin');
+    Route::get('/logout-dokter', [AuthController::class, 'logoutDokter'])->name('logout.dokter');
     Route::get('/logout-mahasiswa', [AuthController::class, 'logoutMahasiswa'])->name('logout.mahasiswa');
 });

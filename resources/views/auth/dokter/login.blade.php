@@ -88,13 +88,13 @@
             </div>
 
             <div class="flex flex-col gap-4 my-5 pt-5 w-auto px-5">
-                <label class="text-3xl font-bold">SISTEM INFORMASI AKADEMIK DOSEN</label>
+                <label class="text-3xl font-bold">SISTEM INFORMASI AKADEMIK DOKTER</label>
 
                 <div class="grid bg-gray-100 p-4 rounded-md">
-                    <label class="font-light text-2xl">LOGIN DOSEN</label>
+                    <label class="font-light text-2xl">LOGIN DOKTER</label>
                     <hr class="my-2">
 
-                    <form class="grid my-4 max-w-xl" action="{{ route('login.prodi.submit') }}" method="post">
+                    <form class="grid my-4 max-w-xl" action="{{ route('login.dokter.submit') }}" method="post">
                         @csrf
                         <div class="mb-5">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
@@ -119,9 +119,9 @@
                 <div class="">
                     <label class="">Catatan: </label>
                     <ul class="list-disc list-inside space-y-2 mt-4">
-                        <li>Prosedur pendaftaran Email Dosen dilakukan oleh Biro Administrasi Umum.
+                        <li>Prosedur pendaftaran Email Dokter dilakukan oleh Biro Administrasi Umum.
                         </li>
-                        <li>Bagi Bapak/Ibu Dosen yang belum mendaftar, silakan hubungi Biro Administrasi Umum / Biro
+                        <li>Bagi Bapak/Ibu Dokter yang belum mendaftar, silakan hubungi Biro Administrasi Umum / Biro
                             Administrasi Akademik Fakultas Anda.
                         </li>
                         <li>Fasilitas Lupa Kata Kunci bisa digunakan untuk mendapatkan kata kunci.

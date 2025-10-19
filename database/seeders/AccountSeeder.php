@@ -6,6 +6,7 @@ use App\Models\Account;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Faker\Factory as Faker;
 
 class AccountSeeder extends Seeder
 {
@@ -14,10 +15,19 @@ class AccountSeeder extends Seeder
      */
     public function run(): void
     {
+        $listRole = ['Admin', 'Dokter', 'Mahasiswa'];
+        $faker = Faker::create('id_ID');
+
         Account::create([
-            'username' => 'admin',
-            'password' => Hash::make(value: 'passwordAdmin'),
+            'username' => 'Admin',
+            'password' => Hash::make('passwordAdmin'),
             'role' => 'Admin',
+        ]);
+
+        Account::create([
+            'username' => 'Dokter',
+            'password' => Hash::make('passwordDokter'),
+            'role' => 'Dokter',
         ]);
 
         Account::create([
@@ -26,28 +36,14 @@ class AccountSeeder extends Seeder
             'role' => 'Mahasiswa',
         ]);
 
-        Account::create(attributes: [
-            'username' => 'Adrian',
-            'password' => Hash::make('passwordMahasiswa'),
-            'role' => 'Mahasiswa',
-        ]);
-
-        Account::create([
-            'username' => 'Jonathan',
-            'password' => Hash::make('passwordMahasiswa'),
-            'role' => 'Mahasiswa',
-        ]);
-
-        Account::create([
-            'username' => 'Stephan',
-            'password' => Hash::make('passwordMahasiswa'),
-            'role' => 'Mahasiswa',
-        ]);
-
-        Account::create([
-            'username' => 'Anderson',
-            'password' => Hash::make('passwordMahasiswa'),
-            'role' => 'Mahasiswa',
-        ]);
+        foreach ($listRole as $role) {
+            for ($i = 0; $i < 5; $i++) {
+                Account::create(attributes: [
+                    'username' => $faker->userName(),
+                    'password' => Hash::make('password'),
+                    'role' => $role,
+                ]);
+            }
+        }
     }
 }
