@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <x-title-prodi>{{ $title }}</x-title-prodi>
+    <x-title-dokter>{{ $title }}</x-title-dokter>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -14,7 +14,7 @@
 
     <!-- Content -->
     <main class="flex-1">
-        <x-header-prodi>{{ $header }}</x-header-prodi>
+        <x-header-dokter>{{ $header }}</x-header-dokter>
         {{ $slot }}
     </main>
 
