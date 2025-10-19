@@ -1,163 +1,214 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ asset('images/logo_rsgm.png') }}">
     <x-title>{{ $title }}</x-title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <style>
         [x-cloak] {
-            display: none !important;
+            display: none !important
         }
     </style>
 </head>
 
-<body>
+<body class="bg-slate-50">
     <div x-data="{
         openModalCreateProject: false,
         openModalUpdateProject: false,
         openModalDeleteProject: false,
         idTugas: null,
         idProject: null,
-        dataProject: [],
-    }" class="flex max-w-7xl mx-auto p-4  items-center justify-center">
-        <div class=" grid gap-4 w-full py-8">
-            <div class="flex items-center justify-center">
-                {{-- <label class="font-bold text-2xl font-sans">Detail Project</label> --}}
-                <h2 class="font-bold text-2xl font-sans">Detail Tugas: {{ $data_tugas->nama_tugas }}</h2>
-            </div>
+        dataProject: {}
+    }" class="mx-auto w-full max-w-screen-7xl px-4 sm:px-6 md:px-8 py-6">
+        {{-- ================= HEADER / HERO ================= --}}
+        <header class="mb-6">
+            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-wider text-slate-500">Detail Tugas</p>
+                    <h1 class="mt-1 text-2xl sm:text-3xl font-extrabold leading-tight text-slate-900">
+                        {{ $data_tugas->nama_tugas }}
+                    </h1>
+                    <p class="text-sm text-slate-500">
+                        Total project: <span class="font-medium">{{ $data_project->total() }}</span>
+                    </p>
+                </div>
 
-            <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
-
-                {{-- Dropdown Laptop s/d PC --}}
-                <div class="w-auto">
-                    <button type="button"
-                        @click="openModalCreateProject = !openModalCreateProject; idTugas={{ $data_tugas->id }};"
-                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center gap-2 justify-between">
-                        <span>Tambahkan Project</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                            fill="#FFFFFF">
-                            <path
-                                d="M440-280h80v-160h160v-80H520v-160h-80v160H280v80h160v160Zm40 200q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('dokter.data.tugas') }}"
+                        class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 18l-6-6 6-6" />
                         </svg>
+                        Kembali
+                    </a>
+                    <button type="button" @click="openModalCreateProject = true; idTugas = {{ $data_tugas->id }};"
+                        class="inline-flex items-center gap-2 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        Tambahkan Project
                     </button>
                 </div>
-
-                <div class="w-full md:w-full lg:w-1/2">
-                    <form action="#" method="GET">
-                        <div
-                            class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0 lg:mb-0    lg:mx-0 lg:max-w-screen-lg">
-                            <div class="relative w-full">
-                                <label for="search"
-                                    class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ">Search</label>
-                                <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                            d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </div>
-
-                                <input autocomplete="off" type="text"
-                                    class="block p-3 pl-10 w-full text-sm md:block md:w-full text-gray-900 
-                                          bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none 
-                                          sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
-                                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Cara Data" type="search" id="search" name="search">
-                            </div>
-                            <div>
-                                <button type="submit"
-                                    class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-blue-700 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
             </div>
 
-            <div class="overflow-auto lg:my-2 rounded-lg shadow-slate-300 shadow-xl">
-                <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
-                        <tr class="">
-                            <th class="w-12 px-4 py-3 lg:p-0 ">No</th>
-                            <th class="w-1/3 px-4 py-3 lg:p-0 ">Nama Project</th>
-                            <th class="w-56 mx-4 py-3 lg:p-4 ">Action</th>
+            {{-- Toolbar: Search --}}
+            <div class="mt-4">
+                <form action="#" method="GET" class="relative sm:w-96">
+                    <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m21 21-3.5-3.5" />
+                        <circle cx="10" cy="10" r="7" />
+                    </svg>
+                    <input id="search" name="search" value="{{ request('search') }}" placeholder="Cari project…"
+                        autocomplete="off"
+                        class="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 py-2.5 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        type="text" />
+                    @if (request('search'))
+                        <a href="{{ url()->current() }}"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-xs px-2 py-1 rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200">
+                            Clear
+                        </a>
+                    @endif
+                </form>
+            </div>
+        </header>
+
+        {{-- ================= DESKTOP TABLE ================= --}}
+        <section class="hidden md:block">
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <table class="min-w-full text-sm">
+                    <thead class="sticky top-0 bg-slate-50 text-slate-700 text-xs uppercase">
+                        <tr>
+                            <th class="px-4 py-3 text-center w-14">No</th>
+                            <th class="px-4 py-3 text-left">Nama Project</th>
+                            <th class="px-4 py-3 text-center w-72">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($data_project as $project)
-                            <tr class="xl:text-base">
-                                <td class="px-4 py-3 lg:p-0">{{ $data_project->firstItem() + $loop->index }}</td>
-                                <td class="px-4 py-3 lg:py-4 text-center">
-                                    {{ $project->nama_project }}
-                                </td>
-
-                                <td class="px-4 py-3 lg:py-4 flex items-center justify-center ">
-                                    <div class="grid gap-4">
+                    <tbody class="divide-y divide-slate-100">
+                        @forelse ($data_project as $project)
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-4 py-3 text-center">{{ $data_project->firstItem() + $loop->index }}</td>
+                                <td class="px-4 py-3 font-medium text-slate-900">{{ $project->nama_project }}</td>
+                                <td class="px-4 py-3">
+                                    <div class="flex items-center justify-center gap-2">
                                         <button type="button"
-                                            @click="openModalUpdateProject = !openModalUpdateProject; dataProject={{ $project }};"
-                                            class="py-3 px-6 bg-amber-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-amber-600 focus:ring-4 focus:ring-amber-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M480-120q-75 0-140.5-28.5t-114-77q-48.5-48.5-77-114T120-480q0-75 28.5-140.5t77-114q48.5-48.5 114-77T480-840q82 0 155.5 35T760-706v-94h80v240H600v-80h110q-41-56-101-88t-129-32q-117 0-198.5 81.5T200-480q0 117 81.5 198.5T480-200q105 0 183.5-68T756-440h82q-15 137-117.5 228.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z" />
+                                            @click="openModalUpdateProject = true; dataProject = @js($project);"
+                                            class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path d="M12 20h9" />
+                                                <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                                             </svg>
-                                            <span>Ubah</span>
+                                            Ubah
                                         </button>
 
                                         <button type="button"
-                                            @click="openModalDeleteProject = !openModalDeleteProject; idProject={{ $project->id }};"
-                                            class="py-3 px-6 bg-red-500 text-white rounded-lg flex items-center justify-center gap-4 hover:bg-red-600 focus:ring-4 focus:ring-red-300">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+                                            @click="openModalDeleteProject = true; idProject = {{ $project->id }};"
+                                            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300">
+                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                stroke="currentColor" stroke-width="2">
+                                                <polyline points="3 6 5 6 21 6" />
+                                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                                <path d="M10 11v6M14 11v6" />
+                                                <path d="M9 6V4h6v2" />
                                             </svg>
-                                            <span>Hapus</span>
+                                            Hapus
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="3" class="px-4 py-10 text-center text-slate-500">
+                                    Belum ada project untuk tugas ini. Tambahkan project dengan tombol di atas.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
-            {{ $data_project->links() }}
 
-            <div class="flex items-center justify-end mt-5">
-                <a href="{{ route('dokter.data.tugas') }}"
-                    class="p-4 bg-blue-500 hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 rounded-lg text-white">
-                    Kembali
-                </a>
-            </div>
-        </div>
+            <div class="mt-4">{{ $data_project->links() }}</div>
+        </section>
 
-        {{-- Modal Create Project --}}
-        <div x-show="openModalCreateProject" x-cloak class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Upload Project Baru</h2>
+        {{-- ================= MOBILE CARDS ================= --}}
+        <section class="md:hidden space-y-3">
+            @forelse ($data_project as $project)
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <div class="flex items-start justify-between gap-3">
+                        <div>
+                            <p class="text-xs text-slate-500">#{{ $data_project->firstItem() + $loop->index }}</p>
+                            <h3 class="mt-1 text-base font-semibold text-slate-900">{{ $project->nama_project }}</h3>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap items-center gap-2">
+                        <button type="button"
+                            @click="openModalUpdateProject = true; dataProject = @js($project);"
+                            class="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                            </svg>
+                            Ubah
+                        </button>
+                        <button type="button"
+                            @click="openModalDeleteProject = true; idProject = {{ $project->id }};"
+                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6" />
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                                <path d="M10 11v6M14 11v6" />
+                            </svg>
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            @empty
+                <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">
+                    Belum ada project. Tekan <span class="font-medium">“Tambahkan Project”</span> di atas.
+                </div>
+            @endforelse
+
+            <div class="mt-4">{{ $data_project->links() }}</div>
+        </section>
+
+        {{-- ================= MODAL: CREATE ================= --}}
+        <div x-cloak x-show="openModalCreateProject" x-transition.opacity.duration.150ms
+            class="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+            <div x-transition.scale.duration.150ms
+                class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold">Upload Project Baru</h2>
+                    <button @click="openModalCreateProject=false" class="rounded-lg p-2 hover:bg-slate-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dokter.tambah.project') }}" method="POST" class="grid gap-4">
                     @csrf
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Project</label>
-                        <input type="text" name="nama_project"
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="tugas_id" :value=idTugas>
-                    </div>
+                    <label class="grid gap-1">
+                        <span class="text-sm font-medium text-slate-700">Nama Project</span>
+                        <input name="nama_project" type="text" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Contoh: Pemeriksaan Radiologi">
+                    </label>
+                    <input type="hidden" name="tugas_id" :value="idTugas">
 
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalCreateProject = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                    <div class="mt-2 flex justify-end gap-2">
+                        <button type="button" @click="openModalCreateProject=false"
+                            class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Batal</button>
+                        <button type="submit"
+                            class="rounded-xl bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700 focus:ring-4 focus:ring-green-300">
                             Upload
                         </button>
                     </div>
@@ -165,75 +216,67 @@
             </div>
         </div>
 
-        {{-- Modal Update Tugas --}}
-        <div x-show="openModalUpdateProject" x-cloak
-            class="fixed inset-0 bg-black/50 flex items-center justify-center">
-            <div class="bg-white p-6 rounded-lg w-[700px]">
-                <h2 class="text-xl font-bold mb-4">Update Tugas </h2>
+        {{-- ================= MODAL: UPDATE ================= --}}
+        <div x-cloak x-show="openModalUpdateProject" x-transition.opacity.duration.150ms
+            class="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+            <div x-transition.scale.duration.150ms
+                class="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold">Update Project</h2>
+                    <button @click="openModalUpdateProject=false" class="rounded-lg p-2 hover:bg-slate-100">
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
                 <form action="{{ route('dokter.edit.project') }}" method="POST" class="grid gap-4">
                     @csrf
-                    <div class="mb-4">
-                        <label class="block mb-1 text-sm font-medium">Nama Project</label>
-                        <input type="text" name="nama_project" :value=dataProject.nama_project
-                            class="w-full border rounded px-3 py-2 focus:outline-none focus:ring">
-                        <input type="hidden" name="id" :value=dataProject.id></input>
-                    </div>
+                    <input type="hidden" name="id" :value="dataProject.id">
 
-                    <div class="flex justify-end gap-2">
-                        <button type="button" @click="openModalUpdateProject = false"
-                            class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Upload
+                    <label class="grid gap-1">
+                        <span class="text-sm font-medium text-slate-700">Nama Project</span>
+                        <input name="nama_project" type="text" :value="dataProject.nama_project" required
+                            class="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </label>
+
+                    <div class="mt-2 flex justify-end gap-2">
+                        <button type="button" @click="openModalUpdateProject=false"
+                            class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Batal</button>
+                        <button type="submit"
+                            class="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300">
+                            Simpan
                         </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- Modal Delete Tugas -->
-        <div x-show="openModalDeleteProject" x-cloak
-            class="fixed inset-0 bg-black/50 flex items-center justify-center overflow-y-auto overflow-x-hidden w-full">
-            <form action="{{ route('dokter.delete.project') }}" method="post">
+        {{-- ================= MODAL: DELETE ================= --}}
+        <div x-cloak x-show="openModalDeleteProject" x-transition.opacity.duration.150ms
+            class="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4">
+            <form action="{{ route('dokter.delete.project') }}" method="POST" x-transition.scale.duration.150ms
+                class="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl ring-1 ring-slate-200">
                 @csrf
-                <div class="relative p-4 w-full max-w-md h-full md:h-auto">
-                    <!-- Modal content -->
-                    <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
-                        <button type="button" @click="openModalDeleteProject = false"
-                            class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-toggle="deleteModal">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                        <input type="hidden" name="id" :value=idProject></input>
-                        <svg class="text-gray-400 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
-                            fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd">
-                            </path>
+                <input type="hidden" name="id" :value="idProject">
+                <div class="text-center">
+                    <div class="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-red-50 text-red-600">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M11 15h2V9h-2v6Zm1-13q.425 0 .713.288Q13 2.575 13 3v2h-2V3q0-.425.288-.712Q11.575 2 12 2ZM6 21q-.825 0-1.412-.587Q4 19.825 4 19V7h16v12q0 .825-.587 1.413Q18.825 21 18 21Zm2-4h8v-8H8Z" />
                         </svg>
-                        <p class="mb-4 text-gray-500 dark:text-gray-300">Apakah anda yakin untuk menghapus project
-                            ini??
-                        </p>
-                        <div class="flex justify-center items-center space-x-4">
-                            <button @click="openModalDeleteProject = false" type="button"
-                                class="py-2 px-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-                                Tidak
-                            </button>
-                            <button type="submit"
-                                class="py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                Ya, saya yakin
-                            </button>
-                        </div>
                     </div>
+                    <h3 class="mb-2 text-lg font-semibold text-slate-900">Hapus Project?</h3>
+                    <p class="mb-4 text-sm text-slate-600">Aksi ini tidak bisa dibatalkan.</p>
+                </div>
+                <div class="mt-2 flex justify-center gap-2">
+                    <button type="button" @click="openModalDeleteProject=false"
+                        class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Batal</button>
+                    <button type="submit"
+                        class="rounded-xl bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700 focus:ring-4 focus:ring-red-300">
+                        Ya, hapus
+                    </button>
                 </div>
             </form>
         </div>

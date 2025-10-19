@@ -1,98 +1,160 @@
 <x-layout-dokter>
+    <x-slot:title>{{ $title }}</x-slot:title>
+    <x-slot:header>{{ $header }}</x-slot:header>
 
-    <x-slot:title>
-        {{ $title }}
-    </x-slot:title>
+    <div x-data="{}" class="mx-auto w-full max-w-screen-7xl px-4 sm:px-6 md:px-8 py-6">
 
-    <x-slot:header>
-        {{ $header }}
-    </x-slot:header>
-
-    <div class="bg-white dark:bg-gray-800 shadow-md sm:rounded-lg relative md:mx-4 lg:mx-4 xl:my-8 xl:mx-4"
-        x-data="{}">
-
-        <div class="flex flex-col items-center p-4 md:flex-row md:space-y-0 lg:justify-between">
-            <div class="w-full md:w-full lg:w-1/2">
-                <form action="#" method="GET">
-                    <div
-                        class="items-center mx-auto space-y-4 max-w-screen-sm sm:flex sm:space-y-0 lg:mb-0    lg:mx-0 lg:max-w-screen-lg">
-                        <div class="relative w-full">
-                            <label for="search"
-                                class="hidden mb-2 text-sm font-medium text-gray-900 dark:text-gray-300 ">Search</label>
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white " aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                                        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                </svg>
-                            </div>
-
-                            <input autocomplete="off" type="text"
-                                class="block p-3 pl-10 w-full text-sm md:block md:w-full text-gray-900 
-                                          bg-gray-50 rounded-lg border border-gray-300 sm:rounded-none 
-                                          sm:rounded-l-lg  focus:ring-blue-500 focus:border-blue-500 
-                                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-                                          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Cara Data" type="search" id="search" name="search">
-                        </div>
-                        <div>
-                            <button type="submit"
-                                class="py-3 px-5 w-full text-sm font-medium text-center text-white rounded-lg border cursor-pointer bg-blue-700 border-blue-600 sm:rounded-none sm:rounded-r-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search
-                            </button>
-                        </div>
-                    </div>
-                </form>
+        {{-- ===== Toolbar: Search + Meta ===== --}}
+        <div class="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm text-slate-500">Total: <span class="font-medium">{{ $dataTugas->total() }}</span>
+                    tugas</p>
             </div>
 
+            <form action="#" method="GET" class="relative w-full sm:w-96">
+                <svg class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21 21-3.5-3.5" />
+                    <circle cx="10" cy="10" r="7" />
+                </svg>
+                <input id="search" name="search" value="{{ request('search') }}" autocomplete="off"
+                    placeholder="Cari tugas atau nama mahasiswa…"
+                    class="w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 py-2.5 text-sm text-slate-900
+                 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    type="text" />
+                @if (request('search'))
+                    <a href="{{ url()->current() }}"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 text-xs px-2 py-1 rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200">
+                        Clear
+                    </a>
+                @endif
+            </form>
         </div>
-        <div class="overflow-auto lg:my-2 ">
-            <table class="w-full md:w-full md:text-sm text-center text-gray-500 dark:text-gray-400 ">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th class="px-4 py-3 lg:p-4 ">No</th>
-                        <th class="px-4 py-3 lg:p-4 ">Nama Tugas</th>
-                        <th class="px-4 py-3 lg:p-4 ">Nama Mahasiswa</th>
-                        <th class="text-center mx-4 py-3 lg:p-4 ">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $no = $dataTugas->firstItem(); @endphp
-                    @foreach ($dataTugas as $tugas)
-                        @if ($tugas->mahasiswa->count() > 0)
-                            @foreach ($tugas->mahasiswa as $mahasiswa)
-                                <tr class="xl:text-base">
-                                    <td class="px-4 py-3 lg:py-4">{{ $no++ }}</td>
-                                    <td class="px-4 py-3 lg:py-4">{{ $tugas->nama_tugas }}</td>
-                                    <td class="px-4 py-3 lg:py-4">{{ $mahasiswa->nama_mahasiswa ?? 'Tidak ada' }}</td>
-                                    <td class="px-4 py-3 lg:py-4 flex items-center justify-center">
-                                        <a href="{{ route('dokter.project.mahasiswa', ['mahasiswa' => $mahasiswa->slug, 'tugas' => $tugas->slug]) }}"
-                                            class="py-3 px-6 bg-amber-600 text-white rounded-lg flex items-center justify-center gap-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px"
-                                                viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-                                                <path
-                                                    d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-                                            </svg>
-                                            <span>Lihat Detail Tugas</span>
-                                        </a>
+
+        {{-- ===== DESKTOP: Table ===== --}}
+        <div class="hidden md:block">
+            <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <table class="min-w-full text-sm">
+                    <thead class="sticky top-0 bg-slate-50 text-slate-700 text-xs uppercase">
+                        <tr>
+                            <th class="px-4 py-3 text-center w-16">No</th>
+                            <th class="px-4 py-3 text-left">Nama Tugas</th>
+                            <th class="px-4 py-3 text-left">Nama Mahasiswa</th>
+                            <th class="px-4 py-3 text-center w-64">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        @php $no = $dataTugas->firstItem(); @endphp
+
+                        @forelse ($dataTugas as $tugas)
+                            @if ($tugas->mahasiswa->count())
+                                @foreach ($tugas->mahasiswa as $mahasiswa)
+                                    <tr class="odd:bg-white even:bg-slate-50 hover:bg-slate-50">
+                                        <td class="px-4 py-3 text-center">{{ $no++ }}</td>
+                                        <td class="px-4 py-3 font-medium text-slate-900">{{ $tugas->nama_tugas }}</td>
+                                        <td class="px-4 py-3">{{ $mahasiswa->nama_mahasiswa ?? 'Tidak ada' }}</td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex items-center justify-center">
+                                                <a href="{{ route('dokter.project.mahasiswa', ['mahasiswa' => $mahasiswa->slug, 'tugas' => $tugas->slug]) }}"
+                                                    class="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-3 py-2 text-white hover:bg-amber-700 focus:ring-4 focus:ring-amber-300">
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2">
+                                                        <path d="m21 21-6-6" />
+                                                        <circle cx="11" cy="11" r="8" />
+                                                    </svg>
+                                                    Detail Tugas
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr class="odd:bg-white even:bg-slate-50">
+                                    <td class="px-4 py-3 text-center">{{ $no++ }}</td>
+                                    <td class="px-4 py-3 font-medium text-slate-900">{{ $tugas->nama_tugas }}</td>
+                                    <td class="px-4 py-3">
+                                        <span
+                                            class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600 ring-1 ring-red-200">
+                                            Belum ada mahasiswa
+                                        </span>
                                     </td>
+                                    <td class="px-4 py-3"></td>
                                 </tr>
-                            @endforeach
-                        @else
+                            @endif
+                        @empty
                             <tr>
-                                <td class="px-4 py-3 lg:py-4">{{ $no++ }}</td>
-                                <td class="px-4 py-3 lg:py-4">{{ $tugas->nama_tugas }}</td>
-                                <td class="px-4 py-3 lg:py-4 text-red-500">Belum ada mahasiswa</td>
-                                <td class="px-4 py-3 lg:py-4"></td>
+                                <td colspan="4" class="px-4 py-12 text-center text-slate-500">
+                                    Data masih kosong. Coba ubah pencarianmu… atau ambil napas dulu, baru coba lagi 😄
+                                </td>
                             </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                {{ $dataTugas->links() }}
+            </div>
         </div>
-        {{ $dataTugas->links() }}
+
+        {{-- ===== MOBILE: Cards ===== --}}
+        <div class="md:hidden space-y-3">
+            @php $noMobile = $dataTugas->firstItem(); @endphp
+
+            @forelse ($dataTugas as $tugas)
+                @if ($tugas->mahasiswa->count())
+                    @foreach ($tugas->mahasiswa as $mahasiswa)
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <p class="text-xs text-slate-500">#{{ $noMobile++ }}</p>
+                                    <h3 class="mt-1 text-base font-semibold text-slate-900">{{ $tugas->nama_tugas }}
+                                    </h3>
+                                    <p class="mt-1 text-sm text-slate-600">Mahasiswa: <span
+                                            class="font-medium">{{ $mahasiswa->nama_mahasiswa ?? 'Tidak ada' }}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <a href="{{ route('dokter.project.mahasiswa', ['mahasiswa' => $mahasiswa->slug, 'tugas' => $tugas->slug]) }}"
+                                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white hover:bg-amber-700">
+                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="m21 21-6-6" />
+                                        <circle cx="11" cy="11" r="8" />
+                                    </svg>
+                                    Detail Tugas
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs text-slate-500">#{{ $noMobile++ }}</p>
+                                <h3 class="mt-1 text-base font-semibold text-slate-900">{{ $tugas->nama_tugas }}</h3>
+                                <p class="mt-1 text-sm">
+                                    <span
+                                        class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-600 ring-1 ring-red-200">
+                                        Belum ada mahasiswa
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @empty
+                <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500">
+                    Data masih kosong. Santai—itu bukan salahmu (mungkin) 😅
+                </div>
+            @endforelse
+
+            <div class="mt-4">
+                {{ $dataTugas->links() }}
+            </div>
+        </div>
 
     </div>
-
-
 </x-layout-dokter>
